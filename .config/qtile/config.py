@@ -30,7 +30,7 @@ from libqtile import bar, layout, widget, hook
 from libqtile.config import Click, Drag, Group, Key, Match, Screen
 from libqtile.lazy import lazy
 from libqtile.utils import guess_terminal
-from libqtile.xkeysyms import keysyms
+from libqtile.backend.x11.xkeysyms import keysyms
 from libqtile.log_utils import logger
 
 import os, socket, subprocess
@@ -283,7 +283,7 @@ def init_widgets_list():
             margin_x = 5
         ),
         widget.CPU(
-            format = '{load_percent}%'
+            format = '{load_percent:02.1f}%'
         ),
 
         widget.Sep(
@@ -354,22 +354,22 @@ def init_widgets_list():
                     update_interval=0.2,
         ),
 
-        widget.Sep(
-            linewidth = 1, 
-            padding = 10, 
-            foreground = colors["white"], 
-            background = colors["black_grey"]
-        ),
-        
-        widget.TextBox(
-            text = "",
-            fontsize = 18
-        ),
+        # widget.Sep(
+        #     linewidth = 1, 
+        #     padding = 10, 
+        #     foreground = colors["white"], 
+        #     background = colors["black_grey"]
+        # ),
+        # 
+        # widget.TextBox(
+        #     text = "",
+        #     fontsize = 18
+        # ),
 
-        widget.GenPollText(
-            func=get_kb_layout,
-            update_interval=0.5,
-        ),
+        # widget.GenPollText(
+        #     func=get_kb_layout,
+        #     update_interval=0.5,
+        # ),
 
         widget.Sep(
             linewidth = 1, 

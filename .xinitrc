@@ -60,4 +60,4 @@ setxkbmap -option caps:swapescape
 picom &
 
 ## Start WM
-exec qtile
+exec qtile start
