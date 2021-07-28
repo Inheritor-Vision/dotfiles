@@ -31,9 +31,6 @@ ls /sys/firmware/efi/efivars
 # Should works out of the box. Use iwctl for WiFi authentication.
 ping archlinux.org 
 
-# Check 
-ping archlinux.org
-
 # ----- NTP Server ----- #
 
 # Set the clock
