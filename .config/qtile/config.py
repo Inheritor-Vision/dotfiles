@@ -43,10 +43,10 @@ terminal = "alacritty"
 font = "FiraCode Nerd Font Mono Bold"
 
 
-available_screens = {
-    "primary": "DP-4",
-    "secondary": "HDMI-0"
-}
+# available_screens = {
+#     "primary": "DP-4",
+#     "secondary": "HDMI-0"
+# }
 
 azerty_group_patch = {1:"ampersand", 2:"eacute", 3:"quotedbl", 4:"apostrophe", 5:"parenleft", 6:"minus", 7:"egrave", 8:"underscore", 9:"ccedilla", 10:"agrave"}
 
