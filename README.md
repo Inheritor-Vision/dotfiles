@@ -5,7 +5,7 @@
 **Source**:
 
 - [ArchLinux Install Guide](https://wiki.archlinux.org/title/installation_guide)
-- [DistoTube ARch Install](https://www.youtube.com/watch?v=PQgyW10xD8s)
+- [DistoTube Arch Install](https://www.youtube.com/watch?v=PQgyW10xD8s)
 
 # For VMs: ISO Install
 
@@ -30,9 +30,6 @@ ls /sys/firmware/efi/efivars
 
 # Should works out of the box. Use iwctl for WiFi authentication.
 ping archlinux.org 
-
-# Check 
-ping archlinux.org
 
 # ----- NTP Server ----- #
 
