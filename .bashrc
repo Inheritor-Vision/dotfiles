@@ -33,7 +33,7 @@ alias ip='ip --color=auto'
 alias ll='ls -lA'
 alias l='ls -CF'
 
-alias git-config='/usr/bin/git --git-dir=/home/vision/dotfiles --work-tree=/home/vision'
+alias git-config='/usr/bin/git --git-dir=/home/vision/.dotfiles --work-tree=/home/vision'
 
 #PS1='[\u@\h \W]\$ '
 
@@ -49,4 +49,4 @@ reset='\e[0m'
 PS1='\['$light_cyan'\]┌──(\['$cyan'\]\u@\h\['$light_cyan'\])-[\['$reset'\]\W\['$light_cyan'\]]\n\['$light_cyan'\]└─\['$cyan'\]\$ \['$reset'\]'
 
 export EDITOR=vim
-export SELDON='/mnt/data/Encyclopedia*Galactica'
+export SELDON='/mnt/data/Encyclopedia Galactica'
