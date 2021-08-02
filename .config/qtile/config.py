@@ -300,7 +300,7 @@ def init_widgets_list():
                 foreground = colors["white"],
                 background = colors["black_grey"],
                 padding = 5,
-                format = '{MemUsed}Mb ({MemPercent}%)'
+                format = '{MemUsed:.0f}Mb ({MemPercent:.0f}%)'
         ),
 
         widget.Sep(
@@ -318,7 +318,7 @@ def init_widgets_list():
                 background = colors["black_grey"],
                 padding = 5,
                 partition = '/',
-                format = '{uf}Gb ({r:.0f}%)',
+                format = '{uf} Gb ({r:.0f}%)',
                 visible_on_warn = False,
                 warn_space = 10
         ),
