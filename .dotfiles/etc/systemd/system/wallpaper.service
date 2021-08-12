@@ -5,11 +5,9 @@ Description=Change wallpaper periodically
 Wants=wallpaper.timer
 
 [Service]
-Environment="BGPATH=/mnt/data/Display\\ System/Real\\ WP"
+# Environment="BGPATH=/mnt/data/Display\\ System/Real\\ WP"
+Environment="BGPATH=/mnt/data/Encyclopedia\\ Galactica/Ressources/Wallpapers"
 Environment="DISPLAY=:0"
 Environment="XAUTHORITY=/home/vision/.Xauthority"
 Type=oneshot
 ExecStart=feh --randomize --bg-max $BGPATH
-
-[Install]
-WantedBy=multi-user.taget

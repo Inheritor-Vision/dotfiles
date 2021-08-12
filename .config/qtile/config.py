@@ -121,15 +121,15 @@ keys += [
 # ----- GROUPS ----- #
 
 def init_group_names():
-    return [("DEV", {'layout':'monadtall'}),
-            ("WWW", {'layout':'max',        'spawn': 'brave'}),
-            ("RAN", {'layout':'monadtall'}),
-            ("VMM", {'layout':'max'}),
-            ("OBS", {'layout':'monadtall'}),
-            ("MUS", {'layout':'monadtall',  'spawn': 'alacritty -e spt'}),
-            ("GFX", {'layout':'floating'}),
-            ("EKS", {'layout':'monadtall'}),
-            ("DOC", {'layout':'monadtall',  'spawn': 'alacritty --working-directory ' + ENCYCLOPEDIA_PATH})]
+    return [("", {'layout':'monadtall'}),
+            ("", {'layout':'max',        'spawn': 'brave'}),
+            ("", {'layout':'monadtall'}),
+            ("", {'layout':'max',        'spawn': 'virtualbox'}),
+            ("壘", {'layout':'monadtall'}),
+            ("", {'layout':'monadtall',  'spawn': 'alacritty -e spt'}),
+            ("", {'layout':'floating'}),
+            ("", {'layout':'monadtall'}),
+            ("", {'layout':'monadtall',  'spawn': 'alacritty --working-directory ' + ENCYCLOPEDIA_PATH})]
 
 group_names = init_group_names()
 groups = [Group(name, **kwargs) for name, kwargs in group_names]
@@ -177,8 +177,8 @@ layouts = [
 
 widget_defaults = dict(
     font=font,
-    fontsize=11,
-    padding=3,
+    fontsize=12,
+    padding=7,
     background = colors["black_grey"]
 )
 extension_defaults = widget_defaults.copy()
@@ -218,11 +218,13 @@ def init_widgets_list():
 
         widget.GroupBox(
             font = font,
+            fontsize = 28, 
             margin_x = 0,
-            margin_y = 2,
-            padding_x = 8,
-            padding_y = 8,
-            borderwidth = 1,
+            margin_y = 3,
+            padding_x = 10,
+            padding_y = 5,
+            borderwidth = 2,
+            center_aligned = True,
             active = colors["white"],
             inactive = colors["white"],
             highlight_method = "block",
@@ -247,106 +249,92 @@ def init_widgets_list():
             foreground = colors["purple"]
         ),
 
-        widget.TextBox(
-            background = colors["white"],
-            foreground = colors["black_grey"],
-            text = "Vision-MAIN", 
-            name="default"
-        ),
+        # widget.TextBox(
+        #     background = colors["white"],
+        #     foreground = colors["black_grey"],
+        #     text = "Vision-MAIN", 
+        #     name="default"
+        # ),
 
-        widget.Sep(
-            linewidth = 1, 
-            padding = 10, 
-            foreground = colors["white"], 
-            background = colors["black_grey"]
-        ),
+        # widget.Sep(
+        #     linewidth = 1, 
+        #     padding = 10, 
+        #     foreground = colors["white"], 
+        #     background = colors["black_grey"]
+        # ),
 
-        widget.Image(
-            filename = "~/.config/qtile/DATA/icons/wired.png",
-            margin = 2,
-            margin_x = 5
-        ),
+        # widget.Image(
+        #     filename = "~/.config/qtile/DATA/icons/wired.png",
+        #     margin = 2,
+        #     margin_x = 5
+        # ),
 
-        widget.Net(
-            interface = "wlp5s0",
-            format = '{down} ▼▲ {up}' # format = '{interface}: {down} ▼▲ {up}'
-        ),
+        # widget.Net(
+        #     interface = "wlp5s0",
+        #     format = '{down} ▼▲ {up}' # format = '{interface}: {down} ▼▲ {up}'
+        # ),
 
-        widget.Sep(
-            linewidth = 0, 
-            padding = 3
-        ),
+        # widget.Sep(
+        #     linewidth = 0, 
+        #     padding = 3
+        # ),
 
-        widget.Image(
-            filename = "~/.config/qtile/DATA/icons/processor.png",
-            margin = 2,
-            margin_x = 5
-        ),
-        widget.CPU(
-            format = '{load_percent:02.1f}%'
-        ),
+        # widget.Image(
+        #     filename = "~/.config/qtile/DATA/icons/processor.png",
+        #     margin = 2,
+        #     margin_x = 5
+        # ),
+        # widget.CPU(
+        #     format = '{load_percent:02.1f}%'
+        # ),
 
-        widget.Sep(
-            linewidth = 0, 
-            padding = 3
-        ),
+        # widget.Sep(
+        #     linewidth = 0, 
+        #     padding = 3
+        # ),
 
-        widget.Image(
-            filename = "~/.config/qtile/DATA/icons/ram.png",
-            margin = 2,
-            margin_x = 5
-        ),
-        widget.Memory(
-                foreground = colors["white"],
-                background = colors["black_grey"],
-                padding = 5,
-                format = '{MemUsed:.0f}Mb ({MemPercent:.0f}%)'
-        ),
+        # widget.Image(
+        #     filename = "~/.config/qtile/DATA/icons/ram.png",
+        #     margin = 2,
+        #     margin_x = 5
+        # ),
+        # widget.Memory(
+        #         foreground = colors["white"],
+        #         background = colors["black_grey"],
+        #         padding = 5,
+        #         format = '{MemUsed:.0f}Mb ({MemPercent:.0f}%)'
+        # ),
 
-        widget.Sep(
-            linewidth = 0, 
-            padding = 3
-        ),
+        # widget.Sep(
+        #     linewidth = 0, 
+        #     padding = 3
+        # ),
 
-        widget.Image(
-            filename = "~/.config/qtile/DATA/icons/hard_drive.png",
-            margin = 2,
-            margin_x = 5
-        ),
-        widget.DF(
-                foreground = colors["white"],
-                background = colors["black_grey"],
-                padding = 5,
-                partition = '/',
-                format = '{uf} Gb ({r:.0f}%)',
-                visible_on_warn = False,
-                warn_space = 10
-        ),
+        # widget.Image(
+        #     filename = "~/.config/qtile/DATA/icons/hard_drive.png",
+        #     margin = 2,
+        #     margin_x = 5
+        # ),
+        # widget.DF(
+        #         foreground = colors["white"],
+        #         background = colors["black_grey"],
+        #         padding = 5,
+        #         partition = '/',
+        #         format = '{uf} Gb ({r:.0f}%)',
+        #         visible_on_warn = False,
+        #         warn_space = 10
+        # ),
 
-        widget.Sep(
-            linewidth = 1, 
-            padding = 10, 
-            foreground = colors["white"], 
-            background = colors["black_grey"]
-        ),
-
-        widget.CurrentLayoutIcon(
-            custom_icon_paths = [os.path.expanduser("~/.config/qtile/DATA/icons")],
-            background = colors["black_grey"],
-            padding = 0,
-            scale = 0.5
-        ),
-
-        widget.Sep(
-            linewidth = 1, 
-            padding = 10, 
-            foreground = colors["white"], 
-            background = colors["black_grey"]
-        ),
+        # widget.Sep(
+        #     linewidth = 1, 
+        #     padding = 10, 
+        #     foreground = colors["white"], 
+        #     background = colors["black_grey"]
+        # ),
 
         widget.TextBox(
-            text = "墳",
-            fontsize = 18
+            text = "",
+            fontsize = 20
         ),
 
         widget.GenPollText(
@@ -377,15 +365,24 @@ def init_widgets_list():
             foreground = colors["white"], 
             background = colors["black_grey"]
         ),
-
-        widget.TextBox(
-            text = "",
-            fontsize = 18
-        ),
         
         widget.Clock(
-            format='%a, %d %b. %Y - %H:%M:%S' # %S for adding seconds
-        )
+            format='%H:%M:%S' # %S for adding seconds
+        ),
+
+        widget.Sep(
+            linewidth = 1, 
+            padding = 10, 
+            foreground = colors["white"], 
+            background = colors["black_grey"]
+        ),
+
+        widget.CurrentLayoutIcon(
+            custom_icon_paths = [os.path.expanduser("~/.config/qtile/DATA/icons")],
+            background = colors["black_grey"],
+            padding = 0,
+            scale = 0.5
+        ),
     ]
     return widgets_list
 
@@ -402,8 +399,8 @@ def init_widgets_screen2():
     return widgets_screen2
 
 def init_screens():
-    return [Screen(top=bar.Bar(widgets=init_widgets_screen1(), opacity=1.0, size=25)),
-            Screen(top=bar.Bar(widgets=init_widgets_screen2(), opacity=1.0, size=25))]
+    return [Screen(top=bar.Bar(widgets=init_widgets_screen1(), opacity=1.0, size=30)),
+            Screen(top=bar.Bar(widgets=init_widgets_screen2(), opacity=1.0, size=30))]
 
 
 if __name__ in ["config", "__main__"]:
