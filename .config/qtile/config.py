@@ -33,7 +33,7 @@ from libqtile.utils import guess_terminal
 from libqtile.backend.x11.xkeysyms import keysyms
 from libqtile.log_utils import logger
 
-import os, socket, subprocess
+import os, socket, subprocess, urllib, psutil
 
 # ----- ALIAS ----- #
 
@@ -54,12 +54,30 @@ colors = {
     "black_grey" : "#282A36",   # panel_bg
     "dark_grey"  : "#434758",   # current_screen_tab_bg
     "white"      : "#ffffff",   # group_names
-    "light_red"  : "#ff5555",   # layout_widget_bg
+    "light_red"  : "#FF5555",   # layout_widget_bg
     "black"      : "#000000",   # other_screen_tabs_bg
     "purple"     : "#A77AC4"   # other_screen_tabs
 }
 
 ENCYCLOPEDIA_PATH = '/mnt/data/Encyclopedia\ Galactica/'
+
+
+# ----- CHECK NETWORK STATUS ----- #
+
+# Interfaces names, see: https://www.freedesktop.org/wiki/Software/systemd/PredictableNetworkInterfaceNames
+def check_interface(interface):
+    interface_addrs = psutil.net_if_addrs().get(interface) or []
+    return socket.AF_INET in [snicaddr.family for snicaddr in interface_addrs]
+
+def icon_check_wifi():
+    wifi_interfaces = [i for i in psutil.net_if_addrs().keys() if "wlp" in i and check_interface(i)]
+    return '<span foreground="' + colors["purple"] + '">直</span>' if wifi_interfaces else '<span foreground="' + colors["light_red"] + '">睊</span>'
+
+
+def icon_check_ethernet():
+    eth_interfaces = [i for i in psutil.net_if_addrs().keys() if "enp" in i and check_interface(i)]
+    return '<span foreground="' + colors["purple"] + '"></span>' if eth_interfaces else  '<span foreground="' + colors["light_red"] + '"></span>'
+    
 
 # ----- KEYS ----- #
 
@@ -249,89 +267,6 @@ def init_widgets_list():
             foreground = colors["purple"]
         ),
 
-        # widget.TextBox(
-        #     background = colors["white"],
-        #     foreground = colors["black_grey"],
-        #     text = "Vision-MAIN", 
-        #     name="default"
-        # ),
-
-        # widget.Sep(
-        #     linewidth = 1, 
-        #     padding = 10, 
-        #     foreground = colors["white"], 
-        #     background = colors["black_grey"]
-        # ),
-
-        # widget.Image(
-        #     filename = "~/.config/qtile/DATA/icons/wired.png",
-        #     margin = 2,
-        #     margin_x = 5
-        # ),
-
-        # widget.Net(
-        #     interface = "wlp5s0",
-        #     format = '{down} ▼▲ {up}' # format = '{interface}: {down} ▼▲ {up}'
-        # ),
-
-        # widget.Sep(
-        #     linewidth = 0, 
-        #     padding = 3
-        # ),
-
-        # widget.Image(
-        #     filename = "~/.config/qtile/DATA/icons/processor.png",
-        #     margin = 2,
-        #     margin_x = 5
-        # ),
-        # widget.CPU(
-        #     format = '{load_percent:02.1f}%'
-        # ),
-
-        # widget.Sep(
-        #     linewidth = 0, 
-        #     padding = 3
-        # ),
-
-        # widget.Image(
-        #     filename = "~/.config/qtile/DATA/icons/ram.png",
-        #     margin = 2,
-        #     margin_x = 5
-        # ),
-        # widget.Memory(
-        #         foreground = colors["white"],
-        #         background = colors["black_grey"],
-        #         padding = 5,
-        #         format = '{MemUsed:.0f}Mb ({MemPercent:.0f}%)'
-        # ),
-
-        # widget.Sep(
-        #     linewidth = 0, 
-        #     padding = 3
-        # ),
-
-        # widget.Image(
-        #     filename = "~/.config/qtile/DATA/icons/hard_drive.png",
-        #     margin = 2,
-        #     margin_x = 5
-        # ),
-        # widget.DF(
-        #         foreground = colors["white"],
-        #         background = colors["black_grey"],
-        #         padding = 5,
-        #         partition = '/',
-        #         format = '{uf} Gb ({r:.0f}%)',
-        #         visible_on_warn = False,
-        #         warn_space = 10
-        # ),
-
-        # widget.Sep(
-        #     linewidth = 1, 
-        #     padding = 10, 
-        #     foreground = colors["white"], 
-        #     background = colors["black_grey"]
-        # ),
-
         widget.TextBox(
             text = "",
             fontsize = 20
@@ -342,39 +277,35 @@ def init_widgets_list():
                     update_interval=0.2,
         ),
 
-        # widget.Sep(
-        #     linewidth = 1, 
-        #     padding = 10, 
-        #     foreground = colors["white"], 
-        #     background = colors["black_grey"]
-        # ),
-        # 
-        # widget.TextBox(
-        #     text = "",
-        #     fontsize = 18
-        # ),
-
-        # widget.GenPollText(
-        #     func=get_kb_layout,
-        #     update_interval=0.5,
-        # ),
 
         widget.Sep(
-            linewidth = 1, 
-            padding = 10, 
-            foreground = colors["white"], 
-            background = colors["black_grey"]
+                linewidth = 1,
+                padding = 10,
+                foreground = colors["white"],
+                background = colors["black_grey"]
         ),
-        
+
+        widget.GenPollText(
+                func = icon_check_wifi,
+                update_interval = 1,
+                fontsize = 20
+        ),
+
+        widget.GenPollText(
+                func = icon_check_ethernet,
+                update_interval = 1,
+                fontsize = 20
+        ),
+
+        widget.Sep(
+                linewidth = 1,
+                padding = 10,
+                foreground = colors["white"],
+                background = colors["black_grey"]
+        ),
+
         widget.Clock(
             format='%H:%M:%S' # %S for adding seconds
-        ),
-
-        widget.Sep(
-            linewidth = 1, 
-            padding = 10, 
-            foreground = colors["white"], 
-            background = colors["black_grey"]
         ),
 
         widget.CurrentLayoutIcon(
@@ -405,31 +336,6 @@ def init_screens():
 
 if __name__ in ["config", "__main__"]:
     screens = init_screens()
-
-# screens = [
-#     Screen(
-#         top=bar.Bar(
-#             [
-#                 widget.CurrentLayout(),
-#                 widget.GroupBox(),
-#                 widget.Prompt(),
-#                 widget.WindowName(),
-#                 widget.Chord(
-#                     chords_colors={
-#                         'launch': ("#ff0000", "#ffffff"),
-#                     },
-#                     name_transform=lambda name: name.upper(),
-#                 ),
-#                 widget.TextBox("default config", name="default"),
-#                 widget.TextBox("Press &lt;M-r&gt; to spawn", foreground="#d75f5f"),
-#                 widget.Systray(),
-#                 widget.Clock(format='%Y-%m-%d %a %I:%M %p'),
-#                 widget.QuickExit(),
-#             ],
-#             24,
-#         ),
-#     ),
-# ]
 
 # Drag floating layouts.
 mouse = [
