@@ -33,7 +33,7 @@ from libqtile.utils import guess_terminal
 from libqtile.backend.x11.xkeysyms import keysyms
 from libqtile.log_utils import logger
 
-import os, socket, subprocess, urllib, psutil
+import os, socket, subprocess, requests, psutil
 
 # ----- ALIAS ----- #
 
@@ -42,6 +42,7 @@ mod = "mod4"
 terminal = "alacritty" 
 font = "FiraCode Nerd Font Mono Bold"
 
+RIGHT_ICON_SIZE = 22
 
 available_screens = {
     "primary": "DP-4",
@@ -56,7 +57,8 @@ colors = {
     "white"      : "#ffffff",   # group_names
     "light_red"  : "#FF5555",   # layout_widget_bg
     "black"      : "#000000",   # other_screen_tabs_bg
-    "purple"     : "#A77AC4"   # other_screen_tabs
+    "purple"     : "#A77AC4",   # other_screen_tabs
+    "monero"     : "#FF6600"    # monero_orange
 }
 
 ENCYCLOPEDIA_PATH = '/mnt/data/Encyclopedia\ Galactica/'
@@ -78,7 +80,18 @@ def icon_check_ethernet():
     eth_interfaces = [i for i in psutil.net_if_addrs().keys() if "enp" in i and check_interface(i)]
     return '<span foreground="' + colors["purple"] + '"></span>' if eth_interfaces else  '<span foreground="' + colors["light_red"] + '"></span>'
     
+# ----- VPN ----- #
 
+def icon_check_vpn():
+    return '<span foreground="' + colors["purple"] + '">嬨</span>' if not subprocess.run(["systemctl", "is-active", "--quiet", "openvpn@vpn.service"]).returncode else  '<span foreground="' + colors["light_red"] + '">嬨</span>'
+
+# ----- XMR ----- #
+
+def crypto_value(crypto):
+    raw_price = requests.get("https://eur.rate.sx/1"+crypto).content.decode("utf-8").split(".")
+    return '<span foreground="' + colors["monero"] + '">' + raw_price[0] + "." + raw_price[1][:2] + '€</span>'
+    
+def xmr_value(): return crypto_value("xmr")
 # ----- KEYS ----- #
 
 keys = []
@@ -267,9 +280,20 @@ def init_widgets_list():
             foreground = colors["purple"]
         ),
 
+        widget.Image(
+            filename    = "~/.config/qtile/DATA/icons/monero-logo.png",
+            margin      = 7,
+            margin_x    = 3,
+        ),
+
+        widget.GenPollText(
+                func    = xmr_value,
+                update_interval = 600
+        ),
+
         widget.TextBox(
             text = "",
-            fontsize = 20
+            fontsize = RIGHT_ICON_SIZE
         ),
 
         widget.GenPollText(
@@ -288,13 +312,19 @@ def init_widgets_list():
         widget.GenPollText(
                 func = icon_check_wifi,
                 update_interval = 1,
-                fontsize = 20
+                fontsize = RIGHT_ICON_SIZE
         ),
 
         widget.GenPollText(
                 func = icon_check_ethernet,
                 update_interval = 1,
-                fontsize = 20
+                fontsize = RIGHT_ICON_SIZE
+        ),
+
+        widget.GenPollText(
+                func = icon_check_vpn,
+                update_interval = 1,
+                fontsize = RIGHT_ICON_SIZE
         ),
 
         widget.Sep(
@@ -410,4 +440,4 @@ def autostart():
 # Shift R = "Shit_R"
 # FN = "ISO_Level3_Shift"
 # CTRL R same as CTRL L
-# Menu = "Menu"
+# Me嬨nu = "Menu"
