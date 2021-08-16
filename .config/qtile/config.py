@@ -49,6 +49,9 @@ available_screens = {
     "secondary": "HDMI-0"
 }
 
+sound_output = "alsa_output.usb-Logitech_PRO_X_000000000000-00.analog-stereo"
+sound_index = None
+
 azerty_group_patch = {1:"ampersand", 2:"eacute", 3:"quotedbl", 4:"apostrophe", 5:"parenleft", 6:"minus", 7:"egrave", 8:"underscore", 9:"ccedilla", 10:"agrave"}
 
 colors = {
@@ -92,6 +95,26 @@ def crypto_value(crypto):
     return '<span foreground="' + colors["monero"] + '">' + raw_price[0] + "." + raw_price[1][:2] + '€</span>'
     
 def xmr_value(): return crypto_value("xmr")
+
+# ----- SOUND ----- #
+
+def get_alsa_index(name):
+    sinks  = subprocess.getoutput("pacmd list-sinks | grep -e 'name:' -e 'index:'").split("\n")
+    index = None
+    lname = None
+    for l in sinks:
+        if not isinstance(index,int):
+            index = int(l[-1])
+        else:
+            lname = l.split("<")[1].split(">")[0]
+            if lname == name:
+                return index
+            index = None
+    else:
+        return -1
+
+sound_index = str(get_alsa_index(sound_output))
+
 # ----- KEYS ----- #
 
 keys = []
@@ -131,9 +154,9 @@ keys += [
     Key([mod], "Right",lazy.next_screen()),
 
     # Sound Control 
-    Key([], "XF86AudioLowerVolume", lazy.spawn("pactl set-sink-volume 1 -5%")),
-    Key([], "XF86AudioRaiseVolume", lazy.spawn("pactl set-sink-volume 1 +5%")),
-    Key([], "XF86AudioMute", lazy.spawn("pactl set-sink-mute 0 toggle")),
+    Key([], "XF86AudioLowerVolume", lazy.spawn("pactl set-sink-volume " + sound_index + " -5%")),
+    Key([], "XF86AudioRaiseVolume", lazy.spawn("pactl set-sink-volume " + sound_index + " +5%")),
+    Key([], "XF86AudioMute", lazy.spawn("pactl set-sink-mute " + sound_index + " toggle")),
 
     # App lauch
     Key([mod], "Return", lazy.spawn(terminal), desc="Launch terminal"),
@@ -285,7 +308,7 @@ def init_widgets_list():
             margin      = 7,
             margin_x    = 3,
         ),
-
+        
         widget.GenPollText(
                 func    = xmr_value,
                 update_interval = 600
@@ -296,11 +319,9 @@ def init_widgets_list():
             fontsize = RIGHT_ICON_SIZE
         ),
 
-        widget.GenPollText(
-                    func=get_current_volume,
-                    update_interval=0.2,
+        widget.PulseVolume(
+            device = "alsa_output.usb-Logitech_PRO_X_000000000000-00.analog-stereo.monitor"
         ),
-
 
         widget.Sep(
                 linewidth = 1,

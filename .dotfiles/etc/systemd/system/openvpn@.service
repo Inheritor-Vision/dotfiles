@@ -1,0 +1,11 @@
+[Unit]
+Description=OpenVPN connection to %i
+After=network.target
+
+[Service]
+Type=forking
+ExecStart=/usr/bin/openvpn --daemon ovpn-%i --cd /home/vision/.config/ovpn --config /home/vision/.config/ovpn/openvpn.conf --auth-user-pass /home/vision/.config/ovpn/arch-france.txt
+ExecReload=/bin/kill -HUP $MAINPID
+
+[Install]
+WantedBy=multi-user.target
