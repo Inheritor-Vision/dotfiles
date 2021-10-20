@@ -1,5 +1,7 @@
 // Place your key bindings in this file to override the defaults
 [
-	{"key": "ctrl+shift+e", "command": "workbench.action.terminal.focus"},
-	{"key": "ctrl+shift+e", "command": "workbench.action.focusActiveEditorGroup", "when": "terminalFocus"}
+	{"key": "ctrl+alt+e", "command": "workbench.action.terminal.focus"},
+	{"key": "ctrl+alt+e", "command": "workbench.action.focusActiveEditorGroup", "when": "terminalFocus"},
+	{"key": "ctrl+pageup","command": "workbench.action.terminal.focusPrevious","when": "terminalFocus && terminalProcessSupported && !terminalEditorFocus"},
+	{"key": "ctrl+pagedown", "command": "workbench.action.terminal.focusNext","when": "terminalFocus && terminalProcessSupported && !terminalEditorFocus"}
 ]
