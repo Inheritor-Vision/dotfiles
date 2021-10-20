@@ -52,6 +52,8 @@ available_screens = {
 sound_output = "alsa_output.usb-Logitech_PRO_X_000000000000-00.analog-stereo"
 sound_index = None
 
+wlan_interface = "wlp5s0"
+
 azerty_group_patch = {1:"ampersand", 2:"eacute", 3:"quotedbl", 4:"apostrophe", 5:"parenleft", 6:"minus", 7:"egrave", 8:"underscore", 9:"ccedilla", 10:"agrave"}
 
 colors = {
@@ -268,7 +270,7 @@ def init_widgets_list():
             padding = 5,
             foreground = colors["white"],
             background = colors["black_grey"],
-        ),
+            ),
 
         widget.GroupBox(
             font = font,
@@ -320,7 +322,7 @@ def init_widgets_list():
         ),
 
         widget.PulseVolume(
-            device = "alsa_output.usb-Logitech_PRO_X_000000000000-00.analog-stereo.monitor"
+            device = sound_output
         ),
 
         widget.Sep(

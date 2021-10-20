@@ -3,7 +3,7 @@ Description=Run wallpaper.service every X minutes
 
 [Timer]
 OnBootSec=1min
-OnUnitActiveSec=15min
+OnUnitActiveSec=2min
 Unit=wallpaper.service
 
 [Install]
