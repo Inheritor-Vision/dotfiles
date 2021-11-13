@@ -5,7 +5,7 @@ Wants=wallpaper.timer
 
 [Service]
 # Environment="BGPATH=/mnt/data/Display\\ System/Real\\ WP"
-Environment="BGPATH=/mnt/data/Encyclopedia\\ Galactica/Division/Art/Section/Ressource/Wallpaper"
+Environment="BGPATH=/mnt/data/Encyclopedia\\ Galactica/Division/Art_Graphique/Section/Wallpaper/Ressource/Wallpaper"
 Environment="DISPLAY=:0"
 Environment="XAUTHORITY=/home/vision/.Xauthority"
 Type=oneshot
