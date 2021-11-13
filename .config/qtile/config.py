@@ -33,10 +33,9 @@ from libqtile.utils import guess_terminal
 from libqtile.backend.x11.xkeysyms import keysyms
 from libqtile.log_utils import logger
 
-import os, socket, subprocess, requests, psutil
+import os, socket, subprocess, requests, psutil, random
 
 # ----- ALIAS ----- #
-
 alt = "mod1"
 mod = "mod4"
 terminal = "alacritty" 
@@ -68,6 +67,27 @@ colors = {
 
 ENCYCLOPEDIA_PATH = '/mnt/data/Encyclopedia\ Galactica/'
 
+# https://github.com/ryanoasis/nerd-fonts/wiki/Glyph-Sets-and-Code-Points
+DICT_FIRA_CODE_POINT = {
+        "Custom_Seti-UI":       (0xe5fa, 0xe62b),
+        "Devicons":             (0xe700, 0xe7c5),
+        "Awesome":              (0xf000, 0xf2e0),
+        "Material_Design":      (0xf500, 0xfd46),
+        "Weather":              (0xe300, 0xe3eb),
+        "Octicons":             (0xf400, 0xf4a8),
+        "Powerline":            (0xe0b4, 0xe0c8),
+        "Powerline2":           (0xe0cc, 0xe0d2),
+        "IEC_Power_Symbols":    (0x23fb, 0x23fe),
+        "Font_Linux":           (0xf300, 0xf313),
+        "Pomicons":             (0xe000, 0xe00d)
+}
+
+# ----- Utils ----- #
+
+def rd_icon():
+    family = random.choices([a for a in DICT_FIRA_CODE_POINT.keys()], [((maxi - mini + 0x4) / 0x4) for (mini,maxi) in DICT_FIRA_CODE_POINT.values()])
+    (mini, maxi) = DICT_FIRA_CODE_POINT[family[0]]
+    return chr(random.randrange(mini, maxi + 0x4, 0x4))
 
 # ----- CHECK NETWORK STATUS ----- #
 
@@ -177,14 +197,15 @@ keys += [
 # ----- GROUPS ----- #
 
 def init_group_names():
-    return [("", {'layout':'monadtall'}),
-            ("", {'layout':'max',        'spawn': 'brave'}),
+    return [
             ("", {'layout':'monadtall'}),
+            ("", {'layout':'max',        'spawn': 'brave'}),
+            ("", {'layout':'monadtall'}),
+            (rd_icon(), {'layout':'monadtall'}),
             ("", {'layout':'max',        'spawn': 'virtualbox'}),
             ("壘", {'layout':'monadtall'}),
             ("", {'layout':'monadtall',  'spawn': 'alacritty -e spt'}),
-            ("", {'layout':'floating'}),
-            ("", {'layout':'monadtall'}),
+            ("歷", {'layout':'monadtall'}),
             ("", {'layout':'monadtall',  'spawn': 'alacritty --working-directory ' + ENCYCLOPEDIA_PATH})]
 
 group_names = init_group_names()
