@@ -89,6 +89,12 @@ def rd_icon():
     (mini, maxi) = DICT_FIRA_CODE_POINT[family[0]]
     return chr(random.randrange(mini, maxi + 0x4, 0x4))
 
+# ----- AutoStart ----- #
+
+@hook.subscribe.startup_once
+def autostart():
+    subprocess.Popen(["/bin/sh", os.path.expanduser("~/.config/qtile/autostart.sh")])
+
 # ----- CHECK NETWORK STATUS ----- #
 
 # Interfaces names, see: https://www.freedesktop.org/wiki/Software/systemd/PredictableNetworkInterfaceNames
@@ -204,7 +210,7 @@ def init_group_names():
             (rd_icon(), {'layout':'monadtall'}),
             ("", {'layout':'max',        'spawn': 'virtualbox'}),
             ("壘", {'layout':'monadtall'}),
-            ("", {'layout':'monadtall',  'spawn': 'alacritty -e spt'}),
+            ("", {'layout':'monadtall',  'spawn': 'spotify'}),
             ("歷", {'layout':'monadtall'}),
             ("", {'layout':'monadtall',  'spawn': 'alacritty --working-directory ' + ENCYCLOPEDIA_PATH})]
 
