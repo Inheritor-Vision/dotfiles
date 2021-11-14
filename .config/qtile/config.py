@@ -186,6 +186,15 @@ keys += [
     Key([], "XF86AudioRaiseVolume", lazy.spawn("pactl set-sink-volume " + sound_index + " +5%")),
     Key([], "XF86AudioMute", lazy.spawn("pactl set-sink-mute " + sound_index + " toggle")),
 
+    # Track Control, attribuated to Spotify
+
+# Fn + F10 = XF86AudioPrev
+# Fn + F11 = XF86AudioPlay
+# Fn + F12 = XF86AudioNext
+    Key([], "XF86AudioPrev", lazy.spawn("dbus-send --dest=org.mpris.MediaPlayer2.spotify --print-reply /org/mpris/MediaPlayer2 org.mpris.MediaPlayer2.Player.Previous")),
+    Key([], "XF86AudioPlay", lazy.spawn("dbus-send --dest=org.mpris.MediaPlayer2.spotify --print-reply /org/mpris/MediaPlayer2 org.mpris.MediaPlayer2.Player.PlayPause")),
+    Key([], "XF86AudioNext", lazy.spawn("dbus-send --dest=org.mpris.MediaPlayer2.spotify --print-reply /org/mpris/MediaPlayer2 org.mpris.MediaPlayer2.Player.Next")),
+
     # App lauch
     Key([mod], "Return", lazy.spawn(terminal), desc="Launch terminal"),
 
