@@ -59,5 +59,8 @@ setxkbmap -option caps:swapescape
 ## Start picom 
 picom &
 
+## Change wallpaper, before wallpaper.timer take his turn
+feh --randomize --bg-max /mnt/data/Encyclopedia\ Galactica/Division/Art_Graphique/Section/Ressource/Wallpaper
+
 ## Start WM
 exec qtile start
