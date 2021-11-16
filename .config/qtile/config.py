@@ -33,7 +33,7 @@ from libqtile.utils import guess_terminal
 from libqtile.backend.x11.xkeysyms import keysyms
 from libqtile.log_utils import logger
 
-import os, socket, subprocess, requests, psutil, random
+import os, socket, subprocess, requests, psutil, random, re, time
 
 # ----- ALIAS ----- #
 alt = "mod1"
@@ -88,6 +88,27 @@ def rd_icon():
     family = random.choices([a for a in DICT_FIRA_CODE_POINT.keys()], [((maxi - mini + 0x4) / 0x4) for (mini,maxi) in DICT_FIRA_CODE_POINT.values()])
     (mini, maxi) = DICT_FIRA_CODE_POINT[family[0]]
     return chr(random.randrange(mini, maxi + 0x4, 0x4))
+
+# For apps with indirection and/or that implements poorly X11 and/or have multiple pids (& fucks with X11 rules)
+# See async wait in qtile https://github.com/qtile/qtile/pull/2063
+# See example of uncatchable apps (Spotify, that now is catchable tbf) https://github.com/qtile/qtile/issues/1915
+# Debug hook: https://gist.github.com/ramnes/2feecfa7aecf7260dd7b65f7cb995c31
+# Workaround: https://groups.google.com/g/qtile-dev/c/DYVYuAzYbG4/m/R8IWR-hfAgAJ
+
+dict_sketchy_apps_once = {"VSCodium": ""}
+
+@hook.subscribe.client_new
+def catch_sketchy_apps_once(window):
+    # if not window.window.get_name():
+    #     time.sleep(0.1)
+    #     logger.warning("[VDEBUG]: \"" + window.window.get_name()) + "\""
+
+    if dict_sketchy_apps_once:
+        a = window.window.get_name()
+        if a in dict_sketchy_apps_once:
+            window.cmd_togroup(dict_sketchy_apps_once[a])
+            dict_sketchy_apps_once.pop(a)
+    
 
 # ----- AutoStart ----- #
 
@@ -221,7 +242,7 @@ def init_group_names():
             ("壘", {'layout':'monadtall'}),
             ("", {'layout':'monadtall',  'spawn': 'spotify'}),
             ("歷", {'layout':'monadtall'}),
-            ("", {'layout':'monadtall',  'spawn': 'alacritty --working-directory ' + ENCYCLOPEDIA_PATH})]
+            ("", {'layout':'monadtall',  'spawn': 'vscodium ' + ENCYCLOPEDIA_PATH + '/.vscode/Enc_Gal.code-workspace', "matches": [Match(title= [re.compile(".*Enc_Gal (Workspace).*")] )]})]
 
 group_names = init_group_names()
 groups = [Group(name, **kwargs) for name, kwargs in group_names]
@@ -463,11 +484,6 @@ focus_on_window_activation = "smart"
 # We choose LG3D to maximize irony: it is a 3D non-reparenting WM written in
 # java that happens to be on java's whitelist.
 wmname = "LG3D"
-
-# ---- STARTUP ----
-@hook.subscribe.startup_once
-def autostart():
-    pass
 
 # ---- KEY MAPPING TEST ----
 # def debug_func(qtile, *args, **kwargs):
