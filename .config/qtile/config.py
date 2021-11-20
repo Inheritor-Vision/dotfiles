@@ -119,8 +119,11 @@ def create_change_wallpaper_mode():
     wallpaper_modes         = ["default", "real"]
     wallpaper_current_mode  = 0
 
-    def change_wallpaper_mode(qtile, wallpaper_current_mode, wallpaper_modes):
+    def change_wallpaper_mode(qtile):
+        global wallpaper_modes
+        global wallpaper_current_mode
         wallpaper_current_mode = (wallpaper_current_mode + 1) % len(wallpaper_modes)
+        logger.warning(os.path.expanduser("~/.config/wallpaper/script.sh"), wallpaper_modes[wallpaper_current_mode])
         subprocess.Popen([os.path.expanduser("~/.config/wallpaper/script.sh"), wallpaper_modes[wallpaper_current_mode]])
     return change_wallpaper_mode
 
@@ -228,7 +231,7 @@ keys += [
     Key([], "XF86AudioNext", lazy.spawn("dbus-send --dest=org.mpris.MediaPlayer2.spotify --print-reply /org/mpris/MediaPlayer2 org.mpris.MediaPlayer2.Player.Next")),
 
     # Change Wallpaper Mode
-    Key([mod], "x", lazy.function(create_change_wallpaper_mode(), wallpaper_current_mode, wallpaper_modes), desc= "Change wallpaper mode"),
+    Key([mod], "x", lazy.function(create_change_wallpaper_mode()), desc= "Change wallpaper mode"),
 
     # App lauch
     Key([mod], "Return", lazy.spawn(terminal), desc="Launch terminal"),
