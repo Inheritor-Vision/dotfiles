@@ -121,7 +121,6 @@ def create_change_wallpaper_mode():
 
     def change_wallpaper_mode(qtile, wallpaper_current_mode, wallpaper_modes):
         wallpaper_current_mode = (wallpaper_current_mode + 1) % len(wallpaper_modes)
-        logger.warning([os.path.expanduser("~/.config/wallpaper/script.sh"), wallpaper_modes[wallpaper_current_mode]])
         subprocess.Popen([os.path.expanduser("~/.config/wallpaper/script.sh"), wallpaper_modes[wallpaper_current_mode]])
     return change_wallpaper_mode
 
