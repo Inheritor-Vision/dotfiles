@@ -94,6 +94,8 @@ def rd_icon():
 # See example of uncatchable apps (Spotify, that now is catchable tbf) https://github.com/qtile/qtile/issues/1915
 # Debug hook: https://gist.github.com/ramnes/2feecfa7aecf7260dd7b65f7cb995c31
 # Workaround: https://groups.google.com/g/qtile-dev/c/DYVYuAzYbG4/m/R8IWR-hfAgAJ
+# Window page: https://github.com/qtile/qtile/blob/0c049edd96069a7030c4895e9832711c07bb0bfa/libqtile/backend/base.py
+# Window.window (set_property?): https://github.com/qtile/qtile/blob/0c049edd96069a7030c4895e9832711c07bb0bfa/libqtile/backend/x11/window.py
 
 dict_sketchy_apps_once = {"VSCodium": ""}
 
@@ -239,7 +241,7 @@ def init_group_names():
             ("", {'layout':'monadtall'}),
             (rd_icon(), {'layout':'monadtall'}),
             ("", {'layout':'max',        'spawn': 'virtualbox'}),
-            ("壘", {'layout':'monadtall'}),
+            ("", {'layout':'treetab',    'spawn': ["discord", 'signal-desktop']}),
             ("", {'layout':'monadtall',  'spawn': 'spotify'}),
             ("歷", {'layout':'monadtall'}),
             ("", {'layout':'monadtall',  'spawn': 'vscodium ' + ENCYCLOPEDIA_PATH + '/.vscode/Enc_Gal.code-workspace', "matches": [Match(title= [re.compile(".*Enc_Gal (Workspace).*")] )]})]
