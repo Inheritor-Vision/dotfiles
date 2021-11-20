@@ -4,8 +4,7 @@ Description=Change wallpaper periodically
 Wants=wallpaper.timer
 
 [Service]
-# Environment="BGPATH=/mnt/data/Display\\ System/Real\\ WP"
-Environment="BGPATH=/mnt/data/Encyclopedia\\ Galactica/Division/Art_Graphique/Section/Wallpaper/Ressource/Wallpaper"
+EnvironmentFile=/home/vision/.config/wallpaper/wallpaper_service.conf
 Environment="DISPLAY=:0"
 Environment="XAUTHORITY=/home/vision/.Xauthority"
 Type=oneshot

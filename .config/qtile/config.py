@@ -110,7 +110,21 @@ def catch_sketchy_apps_once(window):
         if a in dict_sketchy_apps_once:
             window.cmd_togroup(dict_sketchy_apps_once[a])
             dict_sketchy_apps_once.pop(a)
-    
+
+# ----- Wallpaper ----- #
+def create_change_wallpaper_mode():
+    global wallpaper_modes
+    global wallpaper_current_mode
+
+    wallpaper_modes         = ["default", "real"]
+    wallpaper_current_mode  = 0
+
+    def change_wallpaper_mode(qtile, wallpaper_current_mode, wallpaper_modes):
+        wallpaper_current_mode = (wallpaper_current_mode + 1) % len(wallpaper_modes)
+        logger.warning([os.path.expanduser("~/.config/wallpaper/script.sh"), wallpaper_modes[wallpaper_current_mode]])
+        subprocess.Popen([os.path.expanduser("~/.config/wallpaper/script.sh"), wallpaper_modes[wallpaper_current_mode]])
+    return change_wallpaper_mode
+
 
 # ----- AutoStart ----- #
 
@@ -210,13 +224,12 @@ keys += [
     Key([], "XF86AudioMute", lazy.spawn("pactl set-sink-mute " + sound_index + " toggle")),
 
     # Track Control, attribuated to Spotify
-
-# Fn + F10 = XF86AudioPrev
-# Fn + F11 = XF86AudioPlay
-# Fn + F12 = XF86AudioNext
     Key([], "XF86AudioPrev", lazy.spawn("dbus-send --dest=org.mpris.MediaPlayer2.spotify --print-reply /org/mpris/MediaPlayer2 org.mpris.MediaPlayer2.Player.Previous")),
     Key([], "XF86AudioPlay", lazy.spawn("dbus-send --dest=org.mpris.MediaPlayer2.spotify --print-reply /org/mpris/MediaPlayer2 org.mpris.MediaPlayer2.Player.PlayPause")),
     Key([], "XF86AudioNext", lazy.spawn("dbus-send --dest=org.mpris.MediaPlayer2.spotify --print-reply /org/mpris/MediaPlayer2 org.mpris.MediaPlayer2.Player.Next")),
+
+    # Change Wallpaper Mode
+    Key([mod], "x", lazy.function(create_change_wallpaper_mode(), wallpaper_current_mode, wallpaper_modes), desc= "Change wallpaper mode"),
 
     # App lauch
     Key([mod], "Return", lazy.spawn(terminal), desc="Launch terminal"),

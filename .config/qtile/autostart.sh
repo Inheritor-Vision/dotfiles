@@ -1,5 +1,11 @@
 #!/bin/sh
 
+# Wallpaper
+
+ln -sf /home/vision/.config/wallpaper/wallpaper_service_default.conf /home/vision/.config/wallpaper/wallpaper_service.conf
+
+# Spotify
+
 while true
 do
 	dbus_out=$(dbus-send --print-reply --dest=org.freedesktop.DBus  /org/freedesktop/DBus org.freedesktop.DBus.ListNames)
