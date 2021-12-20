@@ -234,7 +234,7 @@ keys += [
     Key([mod], "x", lazy.function(create_change_wallpaper_mode()), desc= "Change wallpaper mode"),
 
     # App lauch
-    Key([mod], "Return", lazy.spawn(terminal), desc="Launch terminal"),
+    Key([mod], "Return", lazy.spawn("/bin/bash -c " + os.path.expanduser("~/.config/qtile/spawn-alacritty-cwd.sh")), desc="Launch terminal with cwd set to focused terminal"),
 
     # Toggle between different layouts as defined below
     Key([mod], "Tab", lazy.next_layout(), desc="Toggle between layouts"),
