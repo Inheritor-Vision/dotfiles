@@ -20,6 +20,9 @@ HISTFILESIZE=2000
 #	    debian_chroot=$(cat /etc/debian_chroot)
 #fi
 
+# ----- PATH ----- #
+
+PATH=$PATH:/home/vision/.local/bin
 
 # ----- ALIAS ----- # 
 
