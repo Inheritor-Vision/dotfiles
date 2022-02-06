@@ -51,13 +51,16 @@ fi
 
 # CUSTOM
 ## Configure screens
-xrandr --output DP-4 --primary --output HDMI-0 --left-of DP-4
+xrandr --output Virtual1 --mode "1920x1080"
 
 ## Swap Caps Lock to Esc
 setxkbmap -option caps:swapescape
 
 ## Start picom 
 picom &
+
+## Change wallpaper, before wallpaper.timer take his turn
+feh --randomize --bg-max ~/.config/qtile/DATA/wallpaper.jpg
 
 ## Start WM
 exec qtile start

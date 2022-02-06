@@ -33,20 +33,30 @@ from libqtile.utils import guess_terminal
 from libqtile.backend.x11.xkeysyms import keysyms
 from libqtile.log_utils import logger
 
-import os, socket, subprocess
+import os, socket, subprocess, requests, psutil, random, re, time
+
+logger.warning("[CONF] Starting conf ...")
 
 # ----- ALIAS ----- #
+host        = socket.gethostname()
+alt         = "mod1"
+mod         = "mod4"
+terminal    = "alacritty" 
+font        = "FiraCode Nerd Font Mono Bold"
 
-alt = "mod1"
-mod = "mod4"
-terminal = "alacritty" 
-font = "FiraCode Nerd Font Mono Bold"
-
+RIGHT_ICON_SIZE = 22
 
 # available_screens = {
 #     "primary": "DP-4",
 #     "secondary": "HDMI-0"
 # }
+
+# TBD: Audio via USB for Virtualbox
+# sound_output = "alsa_output.usb-Logitech_PRO_X_000000000000-00.analog-stereo"
+# sound_index = None
+sound_output    = None
+
+wlan_interface = None
 
 azerty_group_patch = {1:"ampersand", 2:"eacute", 3:"quotedbl", 4:"apostrophe", 5:"parenleft", 6:"minus", 7:"egrave", 8:"underscore", 9:"ccedilla", 10:"agrave"}
 
@@ -54,12 +64,138 @@ colors = {
     "black_grey" : "#282A36",   # panel_bg
     "dark_grey"  : "#434758",   # current_screen_tab_bg
     "white"      : "#ffffff",   # group_names
-    "light_red"  : "#ff5555",   # layout_widget_bg
+    "light_red"  : "#FF5555",   # layout_widget_bg
     "black"      : "#000000",   # other_screen_tabs_bg
-    "purple"     : "#A77AC4"   # other_screen_tabs
+    "purple"     : "#A77AC4",   # other_screen_tabs
+    "monero"     : "#FF6600"    # monero_orange
 }
 
-ENCYCLOPEDIA_PATH = '/mnt/data/Encyclopedia\ Galactica/'
+# TBD: Verify if it is mounted
+# ENCYCLOPEDIA_PATH = '/mnt/data/Encyclopedia\ Galactica/'
+ENCYCLOPEDIA_PATH = None
+# https://github.com/ryanoasis/nerd-fonts/wiki/Glyph-Sets-and-Code-Points
+DICT_FIRA_CODE_POINT = {
+        "Custom_Seti-UI":       (0xe5fa, 0xe62b),
+        "Devicons":             (0xe700, 0xe7c5),
+        "Awesome":              (0xf000, 0xf2e0),
+        "Material_Design":      (0xf500, 0xfd46),
+        "Weather":              (0xe300, 0xe3eb),
+        "Octicons":             (0xf400, 0xf4a8),
+        "Powerline":            (0xe0b4, 0xe0c8),
+        "Powerline2":           (0xe0cc, 0xe0d2),
+        "IEC_Power_Symbols":    (0x23fb, 0x23fe),
+        "Font_Linux":           (0xf300, 0xf313),
+        "Pomicons":             (0xe000, 0xe00d)
+}
+
+# ----- Utils ----- #
+
+def rd_icon():
+    family = random.choices([a for a in DICT_FIRA_CODE_POINT.keys()], [((maxi - mini + 0x4) / 0x4) for (mini,maxi) in DICT_FIRA_CODE_POINT.values()])
+    (mini, maxi) = DICT_FIRA_CODE_POINT[family[0]]
+    return chr(random.randrange(mini, maxi + 0x4, 0x4))
+
+# For apps with indirection and/or that implements poorly X11 and/or have multiple pids (& fucks with X11 rules)
+# See async wait in qtile https://github.com/qtile/qtile/pull/2063
+# See example of uncatchable apps (Spotify, that now is catchable tbf) https://github.com/qtile/qtile/issues/1915
+# Debug hook: https://gist.github.com/ramnes/2feecfa7aecf7260dd7b65f7cb995c31
+# Workaround: https://groups.google.com/g/qtile-dev/c/DYVYuAzYbG4/m/R8IWR-hfAgAJ
+# Window page: https://github.com/qtile/qtile/blob/0c049edd96069a7030c4895e9832711c07bb0bfa/libqtile/backend/base.py
+# Window.window (set_property?): https://github.com/qtile/qtile/blob/0c049edd96069a7030c4895e9832711c07bb0bfa/libqtile/backend/x11/window.py
+
+dict_sketchy_apps_once = {"VSCodium": ""}
+
+@hook.subscribe.client_new
+def catch_sketchy_apps_once(window):
+    # if not window.window.get_name():
+    #     time.sleep(0.1)
+    #     logger.warning("[VDEBUG]: \"" + window.window.get_name()) + "\""
+
+    if dict_sketchy_apps_once:
+        a = window.window.get_name()
+        if a in dict_sketchy_apps_once:
+            window.cmd_togroup(dict_sketchy_apps_once[a])
+            dict_sketchy_apps_once.pop(a)
+
+# ----- Wallpaper ----- #
+def create_change_wallpaper_mode():
+
+    def passing(qtile):
+        return
+
+    if not ENCYCLOPEDIA_PATH:
+        return passing
+
+    global wallpaper_modes
+    global wallpaper_current_mode
+
+    wallpaper_modes         = ["default", "real"]
+    wallpaper_current_mode  = 0
+
+    def change_wallpaper_mode(qtile):
+        global wallpaper_modes
+        global wallpaper_current_mode
+        wallpaper_current_mode = (wallpaper_current_mode + 1) % len(wallpaper_modes)
+        logger.warning(os.path.expanduser("~/.config/wallpaper/script.sh"), wallpaper_modes[wallpaper_current_mode])
+        subprocess.Popen([os.path.expanduser("~/.config/wallpaper/script.sh"), wallpaper_modes[wallpaper_current_mode]])
+    return change_wallpaper_mode
+
+
+# ----- AutoStart ----- #
+
+@hook.subscribe.startup_once
+def autostart():
+    subprocess.Popen(["/bin/sh", os.path.expanduser("~/.config/qtile/autostart.sh")])
+
+# ----- CHECK NETWORK STATUS ----- #
+
+# Interfaces names, see: https://www.freedesktop.org/wiki/Software/systemd/PredictableNetworkInterfaceNames
+def check_interface(interface):
+    interface_addrs = psutil.net_if_addrs().get(interface) or []
+    return socket.AF_INET in [snicaddr.family for snicaddr in interface_addrs]
+
+def icon_check_wifi():
+    wifi_interfaces = [i for i in psutil.net_if_addrs().keys() if "wlp" in i and check_interface(i)]
+    return '<span foreground="' + colors["purple"] + '">直</span>' if wifi_interfaces else '<span foreground="' + colors["light_red"] + '">睊</span>'
+
+
+def icon_check_ethernet():
+    eth_interfaces = [i for i in psutil.net_if_addrs().keys() if "enp" in i and check_interface(i)]
+    return '<span foreground="' + colors["purple"] + '"></span>' if eth_interfaces else  '<span foreground="' + colors["light_red"] + '"></span>'
+    
+# ----- VPN ----- #
+
+def icon_check_vpn():
+    return '<span foreground="' + colors["purple"] + '">嬨</span>' if not subprocess.run(["systemctl", "is-active", "--quiet", "openvpn@vpn.service"]).returncode else  '<span foreground="' + colors["light_red"] + '">嬨</span>'
+
+# ----- XMR ----- #
+
+def crypto_value(crypto):
+    raw_price = requests.get("https://eur.rate.sx/1"+crypto).content.decode("utf-8").split(".")
+    return '<span foreground="' + colors["monero"] + '">' + raw_price[0] + "." + raw_price[1][:2] + '€</span>'
+    
+def xmr_value(): return crypto_value("xmr")
+
+# ----- SOUND ----- #
+
+def get_alsa_index(name):
+    if not name:
+        return None
+    sinks  = subprocess.getoutput("pacmd list-sinks | grep -e 'name:' -e 'index:'").split("\n")
+    index = None
+    lname = None
+    for l in sinks:
+        if not isinstance(index,int):
+            index = int(l[-1])
+        else:
+            lname = l.split("<")[1].split(">")[0]
+            if lname == name:
+                return index
+            index = None
+    else:
+        return -1
+
+sound_index = str(get_alsa_index(sound_output))
 
 # ----- KEYS ----- #
 
@@ -100,12 +236,20 @@ keys += [
     Key([mod], "Right",lazy.next_screen()),
 
     # Sound Control 
-    Key([], "XF86AudioLowerVolume", lazy.spawn("pactl set-sink-volume 1 -5%")),
-    Key([], "XF86AudioRaiseVolume", lazy.spawn("pactl set-sink-volume 1 +5%")),
-    Key([], "XF86AudioMute", lazy.spawn("pactl set-sink-mute 0 toggle")),
+    Key([], "XF86AudioLowerVolume", lazy.spawn("pactl set-sink-volume " + sound_index + " -5%")),
+    Key([], "XF86AudioRaiseVolume", lazy.spawn("pactl set-sink-volume " + sound_index + " +5%")),
+    Key([], "XF86AudioMute", lazy.spawn("pactl set-sink-mute " + sound_index + " toggle")),
+
+    # Track Control, attribuated to Spotify
+    Key([], "XF86AudioPrev", lazy.spawn("dbus-send --dest=org.mpris.MediaPlayer2.spotify --print-reply /org/mpris/MediaPlayer2 org.mpris.MediaPlayer2.Player.Previous")),
+    Key([], "XF86AudioPlay", lazy.spawn("dbus-send --dest=org.mpris.MediaPlayer2.spotify --print-reply /org/mpris/MediaPlayer2 org.mpris.MediaPlayer2.Player.PlayPause")),
+    Key([], "XF86AudioNext", lazy.spawn("dbus-send --dest=org.mpris.MediaPlayer2.spotify --print-reply /org/mpris/MediaPlayer2 org.mpris.MediaPlayer2.Player.Next")),
+
+    # Change Wallpaper Mode
+    Key([mod], "x", lazy.function(create_change_wallpaper_mode()), desc= "Change wallpaper mode"),
 
     # App lauch
-    Key([mod], "Return", lazy.spawn(terminal), desc="Launch terminal"),
+    Key([mod], "Return", lazy.spawn("/bin/bash -c " + os.path.expanduser("~/.config/qtile/spawn-alacritty-cwd.sh")), desc="Launch terminal with cwd set to focused terminal"),
 
     # Toggle between different layouts as defined below
     Key([mod], "Tab", lazy.next_layout(), desc="Toggle between layouts"),
@@ -120,16 +264,31 @@ keys += [
 
 # ----- GROUPS ----- #
 
+# TBD: Verify if package is installed / ENC_PATH is defined
+# def init_group_names():
+#     return [
+#             ("", {'layout':'monadtall'}),
+#             ("", {'layout':'max',        'spawn': 'brave'}),
+#             ("", {'layout':'monadtall'}),
+#             (rd_icon(), {'layout':'monadtall'}),
+#             ("", {'layout':'max'        'spawn': 'virtualbox'}),
+#             ("", {'layout':'treetab',    'spawn': ["discord", 'signal-desktop']}),
+#             ("", {'layout':'monadtall',  'spawn': 'spotify'}),
+#             ("歷", {'layout':'monadtall'}),
+#             ("", {'layout':'monadtall',  'spawn': 'vscodium ' + ENCYCLOPEDIA_PATH + '/.vscode/Enc_Gal.code-workspace', "matches": [Match(title= [re.compile(".*Enc_Gal (Workspace).*")] )]})]
+
 def init_group_names():
-    return [("DEV", {'layout':'monadtall'}),
-            ("WWW", {'layout':'max',        'spawn': 'brave'}),
-            ("RAN", {'layout':'monadtall'}),
-            ("VMM", {'layout':'max'}),
-            ("OBS", {'layout':'monadtall'}),
-            ("MUS", {'layout':'monadtall',  'spawn': 'alacritty -e spt'}),
-            ("GFX", {'layout':'floating'}),
-            ("EKS", {'layout':'monadtall'}),
-            ("DOC", {'layout':'monadtall',  'spawn': 'alacritty --working-directory ' + ENCYCLOPEDIA_PATH})]
+    return [
+            ("", {'layout':'monadtall'}),
+            ("", {'layout':'max'}),
+            ("", {'layout':'monadtall'}),
+            (rd_icon(), {'layout':'monadtall'}),
+            ("", {'layout':'max'}),
+            ("", {'layout':'treetab'}),
+            ("", {'layout':'monadtall',  'spawn': 'spotify'}),
+            ("歷", {'layout':'monadtall'}),
+            ("", {'layout':'monadtall'})]
+
 
 group_names = init_group_names()
 groups = [Group(name, **kwargs) for name, kwargs in group_names]
@@ -177,8 +336,8 @@ layouts = [
 
 widget_defaults = dict(
     font=font,
-    fontsize=11,
-    padding=3,
+    fontsize=12,
+    padding=7,
     background = colors["black_grey"]
 )
 extension_defaults = widget_defaults.copy()
@@ -214,15 +373,17 @@ def init_widgets_list():
             padding = 5,
             foreground = colors["white"],
             background = colors["black_grey"],
-        ),
+            ),
 
         widget.GroupBox(
             font = font,
+            fontsize = 28, 
             margin_x = 0,
-            margin_y = 2,
-            padding_x = 8,
-            padding_y = 8,
-            borderwidth = 1,
+            margin_y = 3,
+            padding_x = 10,
+            padding_y = 5,
+            borderwidth = 2,
+            center_aligned = True,
             active = colors["white"],
             inactive = colors["white"],
             highlight_method = "block",
@@ -247,87 +408,60 @@ def init_widgets_list():
             foreground = colors["purple"]
         ),
 
+        widget.Image(
+            filename    = "~/.config/qtile/DATA/icons/monero-logo.png",
+            margin      = 7,
+            margin_x    = 3,
+        ),
+        
+        widget.GenPollText(
+                func    = xmr_value,
+                update_interval = 600
+        ),
+
         widget.TextBox(
-            background = colors["white"],
-            foreground = colors["black_grey"],
-            text = "Vision-MAIN", 
-            name="default"
+            text = "",
+            fontsize = RIGHT_ICON_SIZE
+        ),
+
+        widget.PulseVolume(
+            device = sound_output
         ),
 
         widget.Sep(
-            linewidth = 1, 
-            padding = 10, 
-            foreground = colors["white"], 
-            background = colors["black_grey"]
-        ),
-
-        widget.Image(
-            filename = "~/.config/qtile/DATA/icons/wired.png",
-            margin = 2,
-            margin_x = 5
-        ),
-
-        widget.Net(
-            interface = "wlp5s0",
-            format = '{down} ▼▲ {up}' # format = '{interface}: {down} ▼▲ {up}'
-        ),
-
-        widget.Sep(
-            linewidth = 0, 
-            padding = 3
-        ),
-
-        widget.Image(
-            filename = "~/.config/qtile/DATA/icons/processor.png",
-            margin = 2,
-            margin_x = 5
-        ),
-        widget.CPU(
-            format = '{load_percent:02.1f}%'
-        ),
-
-        widget.Sep(
-            linewidth = 0, 
-            padding = 3
-        ),
-
-        widget.Image(
-            filename = "~/.config/qtile/DATA/icons/ram.png",
-            margin = 2,
-            margin_x = 5
-        ),
-        widget.Memory(
+                linewidth = 1,
+                padding = 10,
                 foreground = colors["white"],
-                background = colors["black_grey"],
-                padding = 5,
-                format = '{MemUsed}Mb ({MemPercent}%)'
+                background = colors["black_grey"]
+        ),
+
+        widget.GenPollText(
+                func = icon_check_wifi,
+                update_interval = 1,
+                fontsize = RIGHT_ICON_SIZE
+        ),
+
+        widget.GenPollText(
+                func = icon_check_ethernet,
+                update_interval = 1,
+                fontsize = RIGHT_ICON_SIZE
+        ),
+
+        widget.GenPollText(
+                func = icon_check_vpn,
+                update_interval = 1,
+                fontsize = RIGHT_ICON_SIZE
         ),
 
         widget.Sep(
-            linewidth = 0, 
-            padding = 3
-        ),
-
-        widget.Image(
-            filename = "~/.config/qtile/DATA/icons/hard_drive.png",
-            margin = 2,
-            margin_x = 5
-        ),
-        widget.DF(
+                linewidth = 1,
+                padding = 10,
                 foreground = colors["white"],
-                background = colors["black_grey"],
-                padding = 5,
-                partition = '/',
-                format = '{uf}Gb ({r:.0f}%)',
-                visible_on_warn = False,
-                warn_space = 10
+                background = colors["black_grey"]
         ),
 
-        widget.Sep(
-            linewidth = 1, 
-            padding = 10, 
-            foreground = colors["white"], 
-            background = colors["black_grey"]
+        widget.Clock(
+            format='%H:%M:%S' # %S for adding seconds
         ),
 
         widget.CurrentLayoutIcon(
@@ -336,56 +470,6 @@ def init_widgets_list():
             padding = 0,
             scale = 0.5
         ),
-
-        widget.Sep(
-            linewidth = 1, 
-            padding = 10, 
-            foreground = colors["white"], 
-            background = colors["black_grey"]
-        ),
-
-        widget.TextBox(
-            text = "墳",
-            fontsize = 18
-        ),
-
-        widget.GenPollText(
-                    func=get_current_volume,
-                    update_interval=0.2,
-        ),
-
-        # widget.Sep(
-        #     linewidth = 1, 
-        #     padding = 10, 
-        #     foreground = colors["white"], 
-        #     background = colors["black_grey"]
-        # ),
-        # 
-        # widget.TextBox(
-        #     text = "",
-        #     fontsize = 18
-        # ),
-
-        # widget.GenPollText(
-        #     func=get_kb_layout,
-        #     update_interval=0.5,
-        # ),
-
-        widget.Sep(
-            linewidth = 1, 
-            padding = 10, 
-            foreground = colors["white"], 
-            background = colors["black_grey"]
-        ),
-
-        widget.TextBox(
-            text = "",
-            fontsize = 18
-        ),
-        
-        widget.Clock(
-            format='%a, %d %b. %Y - %H:%M:%S' # %S for adding seconds
-        )
     ]
     return widgets_list
 
@@ -402,37 +486,12 @@ def init_widgets_screen2():
     return widgets_screen2
 
 def init_screens():
-    return [Screen(top=bar.Bar(widgets=init_widgets_screen1(), opacity=1.0, size=25)),
-            Screen(top=bar.Bar(widgets=init_widgets_screen2(), opacity=1.0, size=25))]
+    return [Screen(top=bar.Bar(widgets=init_widgets_screen1(), opacity=1.0, size=30)),
+            Screen(top=bar.Bar(widgets=init_widgets_screen2(), opacity=1.0, size=30))]
 
 
 if __name__ in ["config", "__main__"]:
     screens = init_screens()
-
-# screens = [
-#     Screen(
-#         top=bar.Bar(
-#             [
-#                 widget.CurrentLayout(),
-#                 widget.GroupBox(),
-#                 widget.Prompt(),
-#                 widget.WindowName(),
-#                 widget.Chord(
-#                     chords_colors={
-#                         'launch': ("#ff0000", "#ffffff"),
-#                     },
-#                     name_transform=lambda name: name.upper(),
-#                 ),
-#                 widget.TextBox("default config", name="default"),
-#                 widget.TextBox("Press &lt;M-r&gt; to spawn", foreground="#d75f5f"),
-#                 widget.Systray(),
-#                 widget.Clock(format='%Y-%m-%d %a %I:%M %p'),
-#                 widget.QuickExit(),
-#             ],
-#             24,
-#         ),
-#     ),
-# ]
 
 # Drag floating layouts.
 mouse = [
@@ -471,11 +530,6 @@ focus_on_window_activation = "smart"
 # We choose LG3D to maximize irony: it is a 3D non-reparenting WM written in
 # java that happens to be on java's whitelist.
 wmname = "LG3D"
-
-# ---- STARTUP ----
-@hook.subscribe.startup_once
-def autostart():
-    pass
 
 # ---- KEY MAPPING TEST ----
 # def debug_func(qtile, *args, **kwargs):

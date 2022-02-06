@@ -1,0 +1,11 @@
+# Change Wallpaper periodically
+[Unit]
+Description=Change wallpaper periodically
+Wants=wallpaper.timer
+
+[Service]
+EnvironmentFile=/home/vision/.config/wallpaper/wallpaper_service.conf
+Environment="DISPLAY=:0"
+Environment="XAUTHORITY=/home/vision/.Xauthority"
+Type=oneshot
+ExecStart=feh --randomize --bg-max $BGPATH

@@ -7,6 +7,13 @@
 - [ArchLinux Install Guide](https://wiki.archlinux.org/title/installation_guide)
 - [DistoTube Arch Install](https://www.youtube.com/watch?v=PQgyW10xD8s)
 
+# VM Settings
+
+- Check [Network_matrix](https://www.virtualbox.org/manual/ch06.html#networkingmodes) for Networking. 
+- For now, only one screen
+- Add enought Memory & CPU
+- Don't auto mount in the case of Security Investigation
+
 # For VMs: ISO Install
 
 Process to setup a minimal Arch Linux setup:
@@ -155,5 +162,30 @@ exit
 umount /mnt # -l
 shutdown now
 # Remove ISO
+
+# ----- Required ----- #
+
+sudo pacman -Sy archlinux-keyring & sudo pacman -Su
+sudo pacman -S virtualbox-guest-utils
+sudo pacman -S python nvim spotify alacritty git base-devel qtile feh picom
+
+git clone https://aur.archlinux.org/yay.git && cd yay && makepkg -si && cd .. && rm -r yay
+yay -S otf-nerd-fonts-fira-code brave-bin spotify
+
+python -m pip install psutil requests
+
+# ----- Optional ------ #
+
+To be determined.
+
+sudo pacman discord signal-desktop
+yay -S ngrok vscodium-bin vscodium-bin-marketplace
+
+# ----- Security ------ #
+
+To be determined.
+
+sudo pacman -S binwalk ghidra 
+yay -S 010editor android-apktool burpsuite gdb-multiarch gobuster dex2jar jd-gui 
 
 ```
