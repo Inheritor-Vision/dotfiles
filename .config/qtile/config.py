@@ -89,6 +89,8 @@ def rd_icon():
     (mini, maxi) = DICT_FIRA_CODE_POINT[family[0]]
     return chr(random.randrange(mini, maxi + 0x4, 0x4))
 
+icon = rd_icon()
+
 # For apps with indirection and/or that implements poorly X11 and/or have multiple pids (& fucks with X11 rules)
 # See async wait in qtile https://github.com/qtile/qtile/pull/2063
 # See example of uncatchable apps (Spotify, that now is catchable tbf) https://github.com/qtile/qtile/issues/1915
@@ -97,19 +99,27 @@ def rd_icon():
 # Window page: https://github.com/qtile/qtile/blob/0c049edd96069a7030c4895e9832711c07bb0bfa/libqtile/backend/base.py
 # Window.window (set_property?): https://github.com/qtile/qtile/blob/0c049edd96069a7030c4895e9832711c07bb0bfa/libqtile/backend/x11/window.py
 
-dict_sketchy_apps_once = {"VSCodium": ""}
+dict_sketchy_apps_once  = {"VSCodium": ""}
+dict_match              = {re.compile(".* - Oracle VM VirtualBox : 2.*"): icon, re.compile(".* - Oracle VM VirtualBox : 1.*"): ""}
 
 @hook.subscribe.client_new
 def catch_sketchy_apps_once(window):
-    # if not window.window.get_name():
-    #     time.sleep(0.1)
-    #     logger.warning("[VDEBUG]: \"" + window.window.get_name()) + "\""
+    # logger.warning("NAME: " + window.window.get_name())
+    # if re.match(".* - Oracle VM VirtualBox : 1.*", window.window.get_name()):
+    #     logger.warning("FOUND IT")
+    a = window.window.get_name()
 
     if dict_sketchy_apps_once:
-        a = window.window.get_name()
         if a in dict_sketchy_apps_once:
             window.cmd_togroup(dict_sketchy_apps_once[a])
             dict_sketchy_apps_once.pop(a)
+
+    for pattern, group in dict_match.items():
+       if pattern.match(a):
+           window.cmd_togroup(group)
+           break
+        
+
 
 # ----- Wallpaper ----- #
 def create_change_wallpaper_mode():
@@ -123,7 +133,6 @@ def create_change_wallpaper_mode():
         global wallpaper_modes
         global wallpaper_current_mode
         wallpaper_current_mode = (wallpaper_current_mode + 1) % len(wallpaper_modes)
-        logger.warning(os.path.expanduser("~/.config/wallpaper/script.sh"), wallpaper_modes[wallpaper_current_mode])
         subprocess.Popen([os.path.expanduser("~/.config/wallpaper/script.sh"), wallpaper_modes[wallpaper_current_mode]])
     return change_wallpaper_mode
 
@@ -254,8 +263,8 @@ def init_group_names():
             ("", {'layout':'monadtall'}),
             ("", {'layout':'max',        'spawn': 'brave'}),
             ("", {'layout':'monadtall'}),
-            (rd_icon(), {'layout':'monadtall'}),
-            ("", {'layout':'max',        'spawn': 'virtualbox'}),
+            (icon, {'layout':'monadtall', "matches": [Match(title=[re.compile(".* - Oracle VM VirtualBox : 2.*")])]}),
+            ("", {'layout':'max',        'spawn': 'virtualbox', "matches": [Match(title=[re.compile(".* - Oracle VM VirtualBox : 1.*")])]}),
             ("", {'layout':'treetab',    'spawn': ["discord", 'signal-desktop']}),
             ("", {'layout':'monadtall',  'spawn': 'spotify'}),
             ("歷", {'layout':'monadtall'}),
