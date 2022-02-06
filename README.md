@@ -193,4 +193,5 @@ git clone -b portable --single-branch --bare https://github.com/Inheritor-Vision
 git --git-dir=$HOME/.dotfiles/ --work-tree=$HOME reset --hard
 git-config config --local status.showUntrackedFiles no
 git-config status
+git-config push --set-upstream origin portable
 ```
