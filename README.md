@@ -170,7 +170,7 @@ sudo pacman -S virtualbox-guest-utils
 sudo pacman -S python nvim spotify alacritty git base-devel qtile feh picom
 
 git clone https://aur.archlinux.org/yay.git && cd yay && makepkg -si && cd .. && rm -r yay
-yay -S otf-nerd-fonts-fira-code brave-bin spotify
+yay -S otf-nerd-fonts-fira-code brave-bin spotify xdotool
 
 python -m pip install psutil requests
 
