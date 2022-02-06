@@ -22,7 +22,14 @@ HISTFILESIZE=2000
 
 # ----- PATH ----- #
 
-PATH=$PATH:/home/vision/.local/bin
+export PATH=$PATH:/home/vision/.local/bin
+export PYENV_ROOT="$HOME/.pyenv"
+export PATH="$PYENV_ROOT/bin:$PATH"
+
+# ----- PYENV ----- #
+
+eval "$(pyenv init -)"
+# eval "$(pyenv virtualenv-init -)"
 
 # ----- ALIAS ----- # 
 
