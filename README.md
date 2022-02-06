@@ -10,7 +10,7 @@
 # VM Settings
 
 - Check [Network_matrix](https://www.virtualbox.org/manual/ch06.html#networkingmodes) for Networking. 
-- For now, only one screen
+- Need 2 screens (modify .xinitrc for 1)
 - Add enought Memory & CPU
 - Don't auto mount in the case of Security Investigation
 

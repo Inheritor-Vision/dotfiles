@@ -280,7 +280,7 @@ keys += [
 def init_group_names():
     return [
             ("", {'layout':'monadtall'}),
-            ("", {'layout':'max'}),
+            ("", {'layout':'max', "spawn": "brave"}),
             ("", {'layout':'monadtall'}),
             (rd_icon(), {'layout':'monadtall'}),
             ("", {'layout':'max'}),

@@ -51,7 +51,9 @@ fi
 
 # CUSTOM
 ## Configure screens
-xrandr --output Virtual1 --mode "1920x1080"
+xrandr --output VGA-1 --mode "1920x1080"
+xrandr --output VGA-2 --mode "1920x1080"
+xrandr --output VGA-2 --primary --output VGA-1 --left-of VGA-2
 
 ## Swap Caps Lock to Esc
 setxkbmap -option caps:swapescape
