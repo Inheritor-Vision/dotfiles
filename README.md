@@ -187,5 +187,10 @@ To be determined.
 
 sudo pacman -S binwalk ghidra 
 yay -S 010editor android-apktool burpsuite gdb-multiarch gobuster dex2jar jd-gui 
-
+# ----- Dotfiles ----- #
+mkdir .dotfiles
+git clone -b portable --single-branch --bare https://github.com/Inheritor-Vision/dotfiles.git ~/.dotfiles
+git --git-dir=$HOME/.dotfiles/ --work-tree=$HOME reset --hard
+git-config config --local status.showUntrackedFiles no
+git-config status
 ```
