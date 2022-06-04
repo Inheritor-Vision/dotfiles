@@ -214,6 +214,10 @@ keys += [
         desc="Move window down"),
     Key([mod, "shift"], "k", lazy.layout.shuffle_up(), desc="Move window up"),
 
+    # Toggle Floating of a windows
+    # Especially useful to put a windows back in the tiling mode after a missclick
+    Key([mod], "f", lazy.window.toggle_floating(), desc="Toggle window floating"),
+
     # Grow windows. If current window is on the edge of screen and direction
     # will be to screen edge - window would shrink.
     Key([mod, "control"], "h", lazy.layout.grow_left(),
