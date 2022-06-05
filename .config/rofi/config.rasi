@@ -1,0 +1,8 @@
+configuration {
+	font: "FiraCode Nerd Font Mono Bold 11";
+	modi: "window,drun";
+	show-icons: true;
+	icon-theme: "Papirus";
+}
+
+@theme "default"
