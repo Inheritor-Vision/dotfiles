@@ -65,5 +65,8 @@ picom -b --experimental-backends
 ## Change wallpaper, before wallpaper.timer take his turn
 feh --randomize --bg-max /mnt/data/Encyclopedia\ Galactica/Division/Art_Graphique/Wallpaper/Ressource/Wallpaper
 
+## Screenshot utility
+flameshot &
+
 ## Start WM
 exec qtile start

@@ -248,6 +248,7 @@ keys += [
 
     # App lauch
     Key([mod], "Return", lazy.spawn("/bin/bash -c " + os.path.expanduser("~/.config/qtile/spawn-alacritty-cwd.sh")), desc="Launch terminal with cwd set to focused terminal"),
+    Key([], "Print", lazy.spawn("flameshot gui"), desc="Screenshot with Flameshot utility"),
 
     # Toggle between different layouts as defined below
     Key([mod], "Tab", lazy.next_layout(), desc="Toggle between layouts"),
