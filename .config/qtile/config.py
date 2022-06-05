@@ -381,13 +381,13 @@ def init_widgets_list():
             background = colors["black_grey"]
         ),
 
-        widget.Prompt(
-            prompt = "{0}@{1}: ".format(os.environ["USER"], socket.gethostname()),
-            font = font,
-            padding = 10,
-            foreground = colors["light_red"],
-            background = colors["dark_grey"]
-        ),
+        # widget.Prompt(
+        #     prompt = "{0}@{1}: ".format(os.environ["USER"], socket.gethostname()),
+        #     font = font,
+        #     padding = 10,
+        #     foreground = colors["light_red"],
+        #     background = colors["dark_grey"]
+        # ),
 
         widget.WindowName(
             foreground = colors["purple"]
