@@ -56,6 +56,9 @@ xrandr --output DP-4 --primary --output HDMI-0 --left-of DP-4
 ## Swap Caps Lock to Esc
 setxkbmap -option caps:swapescape
 
+## Activate numlock on startup
+numlockx &
+
 ## Start picom 
 picom -b --experimental-backends
 
