@@ -57,7 +57,7 @@ xrandr --output DP-4 --primary --output HDMI-0 --left-of DP-4
 setxkbmap -option caps:swapescape
 
 ## Start picom 
-picom &
+picom -b --experimental-backends
 
 ## Change wallpaper, before wallpaper.timer take his turn
 feh --randomize --bg-max /mnt/data/Encyclopedia\ Galactica/Division/Art_Graphique/Wallpaper/Ressource/Wallpaper
