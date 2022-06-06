@@ -33,10 +33,8 @@ class ColorSchemeUnifier():
         res = self.db.search(Query().image_hash == image_hash)
 
         if res:
-            print("Already in!")
             return res[0]["palette"] 
         else:
-            print("New !!!")
             output = subprocess.check_output(
                     (
                         "node", 
@@ -53,9 +51,3 @@ class ColorSchemeUnifier():
     def _save_color_scheme(self, image_hash, palette):
         self.db.insert({"image_hash": image_hash, "palette": palette})
 
-        
-
-test = ColorSchemeUnifier();
-test.change_theme("/mnt/data/Display System/Real WP/pZF4Q6L.jpg")
-test.change_theme("/mnt/data/Display System/Real WP/giTlCNT.jpg")
-print(test.db.all())
