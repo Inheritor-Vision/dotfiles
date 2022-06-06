@@ -1,3 +1,0 @@
-[submodule ".config/qtile/script/ColorPalette"]
-	path = .config/qtile/theme-generator/ColorPalette
-	url = https://github.com/Inheritor-Vision/ColorPalette
