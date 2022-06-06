@@ -1,4 +1,4 @@
-live_config_reload: false
+live_config_reload: true
 
 # Colors (Tangoish)
 # Note: Orange is used in place of Cyan
