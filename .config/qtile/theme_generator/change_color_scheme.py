@@ -36,6 +36,9 @@ class ColorSchemeUnifier():
 
     def _get_color_scheme(self, image, image_hash):
         res = self.db.search(Query().image_hash == image_hash)
+        
+        if len(res) > 1:
+            raise ValueError("Too much result have been returned, db in an inconsistent state!")
 
         if res and res[0]["colorpalette_ver"] == self.colorpalette_ver:
             return res[0]["palette"]    
