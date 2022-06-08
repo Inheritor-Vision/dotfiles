@@ -30,6 +30,19 @@ def darken_color(c):
     res = convert_color(lab_c,sRGBColor).get_upscaled_value_tuple()
     return res
 
+def min_max_luminosity(scheme):
+        mini = maxi = (convert_color(sRGBColor(*hex_to_rgb(scheme[0]), is_upscaled=True), LabColor).lab_l, scheme[0])
+        for c in scheme[1:]:
+            l = convert_color(sRGBColor(*hex_to_rgb(c), is_upscaled=True), LabColor).lab_l
+            if l > maxi[0]:
+                maxi = (l,c)
+            elif l < mini[0]:
+                mini = (l,c)
+        scheme.remove(mini[1])
+        scheme.remove(maxi[1])
+        return (scheme, mini[1], maxi[1])
+
+
 # Mat is balanced. There is more man than woman.
 def Gale_Shapley(mat):
     mat         = {k:{sk:sv for sk,sv in sorted(v.items(), key=lambda item: item[1])} for k,v in mat.items()}
@@ -98,7 +111,7 @@ schemes:
 
 colors: *auto
 """
-    # Tangoish
+    # Tangoish theme
     DEFAULT_COLOR = {
             # Derived "fg":       "2e3436",
             # Derived "bg":       "eeeeec",
@@ -119,13 +132,21 @@ colors: *auto
             # Derived "bblue":    "729fcf",
             # Derived "bmagenta": "ad7fa8",
             # Derived "bcyan":    "fcaf3e",
-            Derived "bwhite":   "eeeeec",
+            "bwhite":   "eeeeec",
     }
+
+    def _white_black_luminosity(self,scheme):
+        (scheme, mini, maxi) = min_max_luminosity(scheme)
+        return ({"nblack": maxi, "bwhite":mini}, scheme)
 
     def _generate_colors_from_scheme(self, scheme):
         if len(scheme) < len(DEFAULT_COLOR):
             raise ValueError("Not enought color in input")
-        
+
+        # Let's try to take the most luminescent color for white, opposite for black
+        # Should be a better idea than distance (allow more diversity)
+        (palette_default,scheme) = self._white_black_luminosity(scheme)
+
         list_cs_dist = []
         for dc in DEFAULT_COLOR:
             mat_c_dist[dc] = {}
@@ -134,7 +155,7 @@ colors: *auto
         
         palette_dark    = Gale_Shapley(mat_c_dist)
         palette_light   = {"b" + k[1:]: lighten_corlor(v) for k,v in palette_dark.items() if k not in ("fg", "bg")}
-        return {**palette_dark, **palette_light}
+        return {**palette_default, **palette_dark, **palette_light}
 
 
 
