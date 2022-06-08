@@ -15,9 +15,15 @@ def color_distance(c1, c2):
     return delta_e_cie2000(c1, c2)
 
 def lighten_color(c):
-    lab_c   = convert_color(sRGBColor(*hex_to_rgb(c), is_upscaled=True), LabColor)
-    lab_c.lab_l = round(int((100 - lab_c.lab_l)/6)+lab_c.lab_l)
-    return convert_color(lab_c,sRGBColor).get_upscaled_value_tuple()
+    scale = 6   # Seems to be a good value. Room for improvment.
+    res = None
+    while scale:
+        lab_c   = convert_color(sRGBColor(*hex_to_rgb(c), is_upscaled=True), LabColor)
+        lab_c.lab_l = round(((100 - lab_c.lab_l)/scale)+lab_c.lab_l)
+        res = convert_color(lab_c,sRGBColor).get_upscaled_value_tuple()
+        scale = 0 if res[0] < 255 and res[1] < 255 and res[2] < 255 else scale + 1
+    return res
+
 
 # Mat is balanced. There is more man than woman.
 def Gale_Shapley(mat):
