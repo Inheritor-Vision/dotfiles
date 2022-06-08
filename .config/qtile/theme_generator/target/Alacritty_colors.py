@@ -24,6 +24,11 @@ def lighten_color(c):
         scale = 0 if res[0] < 255 and res[1] < 255 and res[2] < 255 else scale + 1
     return res
 
+def darken_color(c):
+    lab_c   = convert_color(sRGBColor(*hex_to_rgb(c), is_upscaled=True), LabColor)
+    lab_c.lab_l = round(lab_c.lab_l - (lab_c.lab_l/9))
+    res = convert_color(lab_c,sRGBColor).get_upscaled_value_tuple()
+    return res
 
 # Mat is balanced. There is more man than woman.
 def Gale_Shapley(mat):
