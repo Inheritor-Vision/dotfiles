@@ -62,19 +62,6 @@ def Gale_Shapley(mat):
                 M_Free.append(m)
     return {v[0]:k for k,v in F.items() if v}
     
-# import random
-# def GS_test():
-#     M_MAX = 10
-#     F_MAX = 20
-#     mat = {}
-#     for i in range(M_MAX):
-#         mat["M%i"%i] = {}
-#         for j in range(F_MAX):
-#             mat["M%d"% i]["M%d"%j] = random.randint(0,100)
-#     print(mat)
-#     print()
-#     print(Gale_Shapley(mat))
-# GS_test()
 
 class Alacritty_colors():
 
@@ -116,7 +103,7 @@ colors: *auto
             # Derived "fg":       "2e3436",
             # Derived "bg":       "eeeeec",
 
-            "nblack":   "2e3436",
+            # Mini "nblack":   "2e3436",
             "nred":     "cc0000",
             "ngreen":   "73d216",
             "nyellow":  "edd400",
@@ -132,36 +119,72 @@ colors: *auto
             # Derived "bblue":    "729fcf",
             # Derived "bmagenta": "ad7fa8",
             # Derived "bcyan":    "fcaf3e",
-            "bwhite":   "eeeeec",
+            # Maxi "bwhite":   "eeeeec",
     }
 
     def _white_black_luminosity(self,scheme):
         (scheme, mini, maxi) = min_max_luminosity(scheme)
         return ({"nblack": maxi, "bwhite":mini}, scheme)
-
+    
     def _generate_colors_from_scheme(self, scheme):
-        if len(scheme) < len(DEFAULT_COLOR):
+        if len(scheme) < len(self.DEFAULT_COLOR):
             raise ValueError("Not enought color in input")
 
         # Let's try to take the most luminescent color for white, opposite for black
         # Should be a better idea than distance (allow more diversity)
         (palette_default,scheme) = self._white_black_luminosity(scheme)
 
-        list_cs_dist = []
-        for dc in DEFAULT_COLOR:
-            mat_c_dist[dc] = {}
+        mat_cs_dist = {}
+        for dc in self.DEFAULT_COLOR:
+            mat_cs_dist[dc] = {}
             for c in scheme:
-               mat_c_dist[dc][c] = color_distance(dc,c)
+               mat_cs_dist[dc][c] = color_distance(self.DEFAULT_COLOR[dc],c)
         
-        palette_dark    = Gale_Shapley(mat_c_dist)
-        palette_light   = {"b" + k[1:]: lighten_corlor(v) for k,v in palette_dark.items() if k not in ("fg", "bg")}
-        return {**palette_default, **palette_dark, **palette_light}
+        palette_dark    = Gale_Shapley(mat_cs_dist)
+        palette_light   = {"b" + k[1:]: rgb_to_hex(lighten_color(v)) for k,v in palette_dark.items() if k not in ("fg", "bg")}
+        return {
+                **palette_default, 
+                **palette_dark, 
+                **palette_light, 
+                "bblack": rgb_to_hex(lighten_color(palette_default["nblack"])),
+                "nwhite": rgb_to_hex(darken_color(palette_default["bwhite"])),
+        }
 
-
-
+    def _test_print(self, palette):
+        chars   = "\x1b[48;2;{0};{1};{2}m" + "   " + "\x1b[0m"
+        dark    = "\t\t"
+        light   = "\t\t"
+        for k in ("black", "red", "green", "yellow", "blue", "magenta", "cyan", "white"):
+            
+            dark    += chars.format(*hex_to_rgb(palette["n" + k]))
+            light   += chars.format(*hex_to_rgb(palette["b" + k]))
+        print()
+        print(dark)
+        print(light)
+        print()
 
 
         
+# import random
+# def GS_test():
+#     M_MAX = 10
+#     F_MAX = 20
+#     mat = {}chars   = "\x1b[48;2;{0};{1};{2}" + u"\u2588"*3 + "A" + "\x1b[0m"
+#     for i in range(M_MAX):
+#         mat["M%i"%i] = {}
+#         for j in range(F_MAX):
+#             mat["M%d"% i]["M%d"%j] = random.randint(0,100)
+#     print(mat)
+#     print()
+#     print(Gale_Shapley(mat))
+# GS_test()
+
+def print_test():
+    scheme = ["2e3436", "cc0000", "73d216", "edd400", "3465a4", "75507b", "f57900", "eeeeec"]
+    ala = Alacritty_colors()
+    ala._test_print(ala._generate_colors_from_scheme(scheme))
+
+print_test()
         
 
 
