@@ -63,7 +63,20 @@ def Gale_Shapley(mat):
     return {v[0]:k for k,v in F.items() if v}
     
 
+def get_visual_scheme(palette):
+    chars   = "\x1b[48;2;{0};{1};{2}m" + "   " + "\x1b[0m"
+    dark    = "\t\t"
+    light   = "\t\t"
+    for k in ("red", "green", "yellow", "blue", "magenta", "cyan","white", "black"):
+        
+        dark    += chars.format(*hex_to_rgb(palette["n" + k]))
+        light   += chars.format(*hex_to_rgb(palette["b" + k]))
+    
+    return "#\n#" + dark + "\n#" + light + "#\n#\n" 
+
 class Alacritty_colors():
+
+    PATH            = "/home/vision/.config/alacritty/alacritty.yml"
 
     TEMPLATE = """\
 live_config_reload: true
@@ -71,30 +84,30 @@ live_config_reload: true
 schemes:
   automatic: &auto
     primary:
-      background: '#{bg}'
-      foreground: '#{fg}'
+      background: '{bg}'
+      foreground: '{fg}'
 
     # Normal colors
     normal:
-      black:   '#{nblack}'
-      red:     '#{nred}'
-      green:   '#{ngreen}'
-      yellow:  '#{nyellow}'
-      blue:    '#{nblue}'
-      magenta: '#{nmagenta}'
-      cyan:    '#{ncyan}'
-      white:   '#{nwhite}'
+      black:   '{nblack}'
+      red:     '{nred}'
+      green:   '{ngreen}'
+      yellow:  '{nyellow}'
+      blue:    '{nblue}'
+      magenta: '{nmagenta}'
+      cyan:    '{ncyan}'
+      white:   '{nwhite}'
 
     # Bright colors
     bright:
-      black:   '#{bblack}'
-      red:     '#{bred}'
-      green:   '#{bgreen}'
-      yellow:  '#{byellow}'
-      blue:    '#{bblue}'
-      magenta: '#{bmagenta}'
-      cyan:    '#{bcyan}'
-      white:   '#{bwhite}'
+      black:   '{bblack}'
+      red:     '{bred}'
+      green:   '{bgreen}'
+      yellow:  '{byellow}'
+      blue:    '{bblue}'
+      magenta: '{bmagenta}'
+      cyan:    '{bcyan}'
+      white:   '{bwhite}'
 
 colors: *auto
 """
@@ -124,9 +137,16 @@ colors: *auto
 
     def _white_black_luminosity(self,scheme):
         (scheme, mini, maxi) = min_max_luminosity(scheme)
-        return ({"nblack": maxi, "bwhite":mini}, scheme)
+        return ({"nblack": mini, "bwhite":maxi}, scheme)
     
-    def _generate_colors_from_scheme(self, scheme):
+    def generate_conf_from_colors(self, colors):
+        conf    = self.TEMPLATE.format(**colors)
+        prefix  = "#AUTOMATICLY GENERATED CONF FILE\n" + get_visual_scheme(colors)
+        with open(self.PATH, "w") as f:
+            f.write(prefix)
+            f.write(conf)
+
+    def generate_colors_from_scheme(self, scheme):
         if len(scheme) < len(self.DEFAULT_COLOR):
             raise ValueError("Not enought color in input")
 
@@ -148,43 +168,10 @@ colors: *auto
                 **palette_light, 
                 "bblack": rgb_to_hex(lighten_color(palette_default["nblack"])),
                 "nwhite": rgb_to_hex(darken_color(palette_default["bwhite"])),
+                "fg"    : palette_default["bwhite"],
+                "bg"    : palette_default["nblack"],
         }
 
-    def _test_print(self, palette):
-        chars   = "\x1b[48;2;{0};{1};{2}m" + "   " + "\x1b[0m"
-        dark    = "\t\t"
-        light   = "\t\t"
-        for k in ("black", "red", "green", "yellow", "blue", "magenta", "cyan", "white"):
-            
-            dark    += chars.format(*hex_to_rgb(palette["n" + k]))
-            light   += chars.format(*hex_to_rgb(palette["b" + k]))
-        print()
-        print(dark)
-        print(light)
-        print()
-
-
-        
-# import random
-# def GS_test():
-#     M_MAX = 10
-#     F_MAX = 20
-#     mat = {}chars   = "\x1b[48;2;{0};{1};{2}" + u"\u2588"*3 + "A" + "\x1b[0m"
-#     for i in range(M_MAX):
-#         mat["M%i"%i] = {}
-#         for j in range(F_MAX):
-#             mat["M%d"% i]["M%d"%j] = random.randint(0,100)
-#     print(mat)
-#     print()
-#     print(Gale_Shapley(mat))
-# GS_test()
-
-def print_test():
-    scheme = ["2e3436", "cc0000", "73d216", "edd400", "3465a4", "75507b", "f57900", "eeeeec"]
-    ala = Alacritty_colors()
-    ala._test_print(ala._generate_colors_from_scheme(scheme))
-
-print_test()
-        
-
+    def _print_test_scheme(self, scheme):
+        print(get_visual_scheme(scheme))
 
