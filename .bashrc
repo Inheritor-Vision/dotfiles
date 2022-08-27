@@ -63,7 +63,7 @@ export SELDON='/mnt/data/Encyclopedia Galactica'
 
 # ----- nnn ------ #
 
-export NNN_OPTS="H"
+export NNN_OPTS="edU"
 
 n ()
 {
