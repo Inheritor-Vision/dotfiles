@@ -109,15 +109,23 @@ def catch_sketchy_apps_once(window):
     #     logger.warning("FOUND IT")
     a = window.window.get_name()
 
+    if type(a) != str:
+        if type(a) == None:
+            return
+        else:
+            logger.warning("[LOG] window.get_name(): " + str(a))
+            logger.warning("[LOG] window.get_name(): " + str(type(a)))
+
+
     if dict_sketchy_apps_once:
         if a in dict_sketchy_apps_once:
             window.cmd_togroup(dict_sketchy_apps_once[a])
             dict_sketchy_apps_once.pop(a)
 
     for pattern, group in dict_match.items():
-       if pattern.match(a):
-           window.cmd_togroup(group)
-           break
+        if pattern.match(a):
+            window.cmd_togroup(group)
+            break
         
 
 
