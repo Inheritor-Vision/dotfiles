@@ -172,7 +172,7 @@ sudo pacman -S python python-pip nvim spotify alacritty git base-devel qtile feh
 git clone https://aur.archlinux.org/yay.git && cd yay && makepkg -si && cd .. && rm -r yay
 yay -S otf-nerd-fonts-fira-code brave-bin spotify xdotool
 
-python -m pip install psutil requests
+python -m pip install psutil requests --user
 
 # ----- Optional ------ #
 
