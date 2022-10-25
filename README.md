@@ -167,7 +167,7 @@ shutdown now
 
 sudo pacman -Sy archlinux-keyring & sudo pacman -Su
 sudo pacman -S virtualbox-guest-utils
-sudo pacman -S python python-pip nvim spotify alacritty git base-devel qtile feh picom
+sudo pacman -S python python-pip nvim spotify alacritty git base-devel qtile feh picom pulseaudio
 
 git clone https://aur.archlinux.org/yay.git && cd yay && makepkg -si && cd .. && rm -r yay
 yay -S otf-nerd-fonts-fira-code brave-bin spotify xdotool
