@@ -167,6 +167,7 @@ shutdown now
 
 sudo pacman -Sy archlinux-keyring & sudo pacman -Su
 sudo pacman -S virtualbox-guest-utils
+sudo systemctl enable vboxservice.service
 sudo pacman -S python python-pip nvim spotify alacritty git base-devel qtile feh picom pulseaudio
 
 git clone https://aur.archlinux.org/yay.git && cd yay && makepkg -si && cd .. && rm -r yay
