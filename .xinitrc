@@ -60,7 +60,7 @@ setxkbmap -option caps:swapescape
 numlockx &
 
 ## Start picom 
-picom -b --experimental-backends
+picom -b
 
 ## Change wallpaper, before wallpaper.timer take his turn
 feh --randomize --bg-max /mnt/data/Encyclopedia\ Galactica/Division/Art_Graphique/Wallpaper/Ressource/Wallpaper
