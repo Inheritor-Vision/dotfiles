@@ -163,3 +163,20 @@ shutdown now
 ##  Grub Theme
 
 Grub theme used is [minefield](https://github.com/Lxtharia/minegrub-theme).
+
+Add the following entry to `/etc/grub.d/40_custom` with this inputs:
+- Find UEFI Windows partition with `sudo os-prober`
+- fs_uuid: `sudo grub-probe -t fs_uuid -d /dev/*partition*`
+- hints_string: `sudo grub-probe -t hints_string -d /dev/*partition*`
+
+```grub
+if [ "${grub_platform}" == "efi" ]; then
+	menuentry "Windows" {
+		insmod part_gpt
+		insmod fat
+		insmod chain
+		search --no-floppy --fs-uuid --set=root *hints_string* *fs_uuid*
+		chainloader /EFI/Microsoft/Boot/bootmgfw.efi
+	}
+fi
+```
