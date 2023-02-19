@@ -157,3 +157,9 @@ shutdown now
 # Remove ISO
 
 ```
+
+# Optional
+
+##  Grub Theme
+
+Grub theme used is [minefield](https://github.com/Lxtharia/minegrub-theme).
