@@ -68,5 +68,8 @@ feh --randomize --bg-max /mnt/data/Encyclopedia\ Galactica/Division/Art_Graphiqu
 ## Screenshot utility
 flameshot &
 
+## Minefield text cycle
+[-x /boot/grub/themes/minegrub-theme/Cycle/Cycler.sh] && /boot/grub/themes/minegrub-theme/Cycle/Cycler.sh
+
 ## Start WM
 exec qtile start
