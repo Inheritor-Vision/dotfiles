@@ -421,7 +421,7 @@ def init_widgets_list():
 			background = None,
 			borderwidth = 1,
 			colors = [
-				colors["cyan"], colors["magenta"], colors["yellow"], colors["red"], colors["blue"], colors["green"], colors["white"]
+				colors["red"], colors["light_red"], colors["yellow"], colors["light_green"], colors["green"], colors["light_blue"], colors["blue"], colors["cyan"], colors["light_magenta"], colors["magenta"]
 			],
 			highlight_color = colors["black"],
 			highlight_method = "line",
