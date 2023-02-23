@@ -1,54 +1,26 @@
-# Copyright (c) 2010 Aldo Cortesi
-# Copyright (c) 2010, 2014 dequis
-# Copyright (c) 2012 Randall Ma
-# Copyright (c) 2012-2014 Tycho Andersen
-# Copyright (c) 2012 Craig Barnes
-# Copyright (c) 2013 horsik
-# Copyright (c) 2013 Tao Sauvage
-#
-# Permission is hereby granted, free of charge, to any person obtaining a copy
-# of this software and associated documentation files (the "Software"), to deal
-# in the Software without restriction, including without limitation the rights
-# to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-# copies of the Software, and to permit persons to whom the Software is
-# furnished to do so, subject to the following conditions:
-#
-# The above copyright notice and this permission notice shall be included in
-# all copies or substantial portions of the Software.
-#
-# THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-# IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-# FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-# AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-# LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-# OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-# SOFTWARE.
-
-from typing import List  # noqa: F401
+from typing import List  
 
 from core.widget.custom_groupbox import CustomGroupBox
 from core.widget.custom_textbox import CustomTextBox
 
 from qtile_extras import widget
-from qtile_extras.widget.decorations import RectDecoration, BorderDecoration, PowerLineDecoration
 from qtile_extras.widget import modify
+from qtile_extras.widget.decorations import RectDecoration, PowerLineDecoration
 from libqtile import bar, layout, hook
+from libqtile.backend.x11.xkeysyms import keysyms
 from libqtile.bar import CALCULATED
 from libqtile.config import Click, Drag, Group, Key, Match, Screen
 from libqtile.lazy import lazy
-from libqtile.backend.x11.xkeysyms import keysyms
 from libqtile.log_utils import logger
 
 
-import os, socket, subprocess, requests, psutil, random, re, time
+import os, socket, subprocess, requests, psutil, random, re
 
 # ----- ALIAS ----- #
 alt = "mod1"
 mod = "mod4"
 terminal = "alacritty" 
 font = "FiraCode Nerd Font" # Do not use Mono. Because icons will appears as too small.
-
-RIGHT_ICON_SIZE = 22
 
 available_screens = {
 	"primary": "DP-4",
@@ -319,7 +291,6 @@ layout_theme = {
 		"border_normal": "1D2330"
 }
 
-
 layouts = [
 	layout.Max(**layout_theme),
 	layout.MonadTall(**layout_theme, ratio = 0.6),
@@ -386,8 +357,8 @@ def init_widgets_list():
 
 		modify(
 			CustomTextBox,
-			background 	= colors["blue"],
-			foreground 	= colors["black"],
+			background 	= colors["light_blue"],
+			foreground 	= colors["light_black"],
 			decorations = [ 
 				RectDecoration(
 					filled = True,
@@ -407,7 +378,7 @@ def init_widgets_list():
 
 		CustomTextBox(
 			background = None,
-			foreground = colors["white"],
+			foreground = colors["light_white"],
 			font = font,
 			fontsize = 16,
 			offset = -8,
@@ -423,9 +394,9 @@ def init_widgets_list():
 			colors = [
 				colors["red"], colors["light_red"], colors["yellow"], colors["light_green"], colors["green"], colors["light_blue"], colors["blue"], colors["cyan"], colors["light_magenta"], colors["magenta"]
 			],
-			highlight_color = colors["black"],
+			highlight_color = colors["light_black"],
 			highlight_method = "line",
-			inactive = colors["light_black"],
+			inactive = colors["light_white"],
 			invert = True,
 			padding = 7,
 			rainbox = True
@@ -433,7 +404,7 @@ def init_widgets_list():
 
 		CustomTextBox(
 			background = None,
-			foreground = colors["white"],
+			foreground = colors["light_white"],
 			font = font,
 			fontsize = 16,
 			offset = 4,
@@ -443,8 +414,8 @@ def init_widgets_list():
 
 		modify(
 			CustomTextBox,
-			background 	= colors["magenta"],
-			foreground = colors["black"],
+			background 	= colors["light_magenta"],
+			foreground = colors["light_black"],
 			decorations = [ 
 				RectDecoration(
 					filled = True,
@@ -460,8 +431,8 @@ def init_widgets_list():
 
 		modify(
 			widget.PulseVolume,
-			foreground = colors["black"],
-			background = colors["magenta"],
+			foreground = colors["light_black"],
+			background = colors["light_magenta"],
 			font = font,
 			fontsize = 13,
 			decorations = [
@@ -480,8 +451,8 @@ def init_widgets_list():
 
 		modify(
 			CustomTextBox,
-			foreground = colors["black"],
-			background = colors["red"],
+			foreground = colors["light_black"],
+			background = colors["light_red"],
 			font = font,
 			fontsize = 13,
 			offset = -1,
@@ -491,8 +462,8 @@ def init_widgets_list():
 
 		modify(
 			widget.CheckUpdates,
-			foreground = colors["black"],
-			background = colors["red"],
+			foreground = colors["light_black"],
+			background = colors["light_red"],
 			font = font,
 			fontsize = 13,
 			decorations = [
@@ -502,8 +473,8 @@ def init_widgets_list():
 					use_widget_background = True
 				)
 			],
-			colour_have_updates = colors["black"],
-			colour_no_updates = colors["black"],
+			colour_have_updates = colors["light_black"],
+			colour_no_updates = colors["light_black"],
 			display_format = "{updates} updates  ",
 			distro = "Arch_checkupdates",
 			initial_text = "No update  ",
@@ -515,7 +486,7 @@ def init_widgets_list():
 		widget.Spacer(),
 
 		widget.WindowName(
-			foreground = colors["white"],
+			foreground = colors["light_white"],
 			background = None,
 			font = font,
 			fontsize = 13,
@@ -528,8 +499,8 @@ def init_widgets_list():
 
 		modify(
 			CustomTextBox,
-			foreground = colors["black"],
-			background = colors["green"],
+			foreground = colors["light_black"],
+			background = colors["light_green"],
 			decorations = [
 				RectDecoration(
 					filled = True,
@@ -545,8 +516,8 @@ def init_widgets_list():
 		),
 
 		widget.CPU(
-			foreground = colors["black"],
-			background = colors["green"],
+			foreground = colors["light_black"],
+			background = colors["light_green"],
 			font = font,
 			fontsize = 13,
 			decorations = [
@@ -559,8 +530,8 @@ def init_widgets_list():
 		),
 
 		CustomTextBox(
-			foreground = colors["black"],
-			background = colors["yellow"],
+			foreground = colors["light_black"],
+			background = colors["light_yellow"],
 			font = font,
 			fontsize = 16,
 			offset = -2,
@@ -570,8 +541,8 @@ def init_widgets_list():
 		),
 
 		widget.Memory(
-			foreground = colors["black"],
-			background = colors["yellow"],
+			foreground = colors["light_black"],
+			background = colors["light_yellow"],
 			font = font,
 			fontsize = 13,
 			decorations = [
@@ -586,8 +557,8 @@ def init_widgets_list():
 		),
 
 		CustomTextBox(
-			foreground = colors["black"],
-			background = colors["cyan"],
+			foreground = colors["light_black"],
+			background = colors["light_cyan"],
 			font = font,
 			fontsize = 13,
 			offset = -1,
@@ -596,8 +567,8 @@ def init_widgets_list():
 		),
 
 		widget.DF(
-			foreground = colors["black"],
-			background = colors["cyan"],
+			foreground = colors["light_black"],
+			background = colors["light_cyan"],
 			font = font,
 			fontsize = 13,
 			decorations = [
@@ -611,12 +582,12 @@ def init_widgets_list():
 			padding = 0,
 			partition = "/",
 			visible_on_warn = False,
-			warn_color = colors["cyan"]
+			warn_color = colors["light_cyan"]
 		),
 
 		CustomTextBox(
 			background = None,
-			foreground = colors["white"],
+			foreground = colors["light_white"],
 			font = font,
 			fontsize = 16,
 			padding = 8,
@@ -625,8 +596,8 @@ def init_widgets_list():
 
 		modify(
 			CustomTextBox,
-			foreground = colors["black"],
-			background = colors["magenta"],
+			foreground = colors["light_black"],
+			background = colors["light_magenta"],
 			decorations = [
 				RectDecoration(
 					filled = True,
@@ -643,8 +614,8 @@ def init_widgets_list():
 
 		modify(
 			widget.Clock,
-			foreground = colors["black"],
-			background = colors["magenta"],
+			foreground = colors["light_black"],
+			background = colors["light_magenta"],
 			decorations = [
 				RectDecoration(
 					filled = True,
@@ -762,8 +733,8 @@ def init_widgets_screen2():
 	return widgets_screen2
 
 def init_screens():
-	return [Screen(top=bar.Bar(widgets=init_widgets_screen1(), size=22, backgroud=colors["black"], margin=[10,10,0,10], border_width=4, opacity = 1)),
-			Screen(top=bar.Bar(widgets=init_widgets_screen1(), size=22, backgroud=colors["black"], margin=[10,10,0,10], border_width=4, opacity = 1))]
+	return [Screen(top=bar.Bar(widgets=init_widgets_screen1(), size=22, background=colors["light_black"], border_color=colors["light_black"], margin=[10,10,0,10], border_width=4, opacity = 1)),
+			Screen(top=bar.Bar(widgets=init_widgets_screen1(), size=22, background=colors["light_black"], border_color=colors["light_black"], margin=[10,10,0,10], border_width=4, opacity = 1))]
 
 
 
