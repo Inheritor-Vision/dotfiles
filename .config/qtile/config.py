@@ -356,9 +356,8 @@ def init_widgets_list():
 		),
 
 		modify(
-			CustomTextBox,
+			widget.Image,
 			background 	= colors["light_blue"],
-			foreground 	= colors["light_black"],
 			decorations = [ 
 				RectDecoration(
 					filled = True,
@@ -371,9 +370,8 @@ def init_widgets_list():
 			# mouse_callbacks = {
 			# 	"Button1": lazy.restart()
 			# },
-			offset = 4,
 			padding = 20,
-			text = ""
+			filename = "~/.config/qtile/DATA/icons/Inheritor_logo.png",
 		),
 
 		CustomTextBox(
