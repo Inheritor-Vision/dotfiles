@@ -392,12 +392,11 @@ def init_widgets_list():
 			colors = [
 				colors["red"], colors["light_red"], colors["yellow"], colors["light_green"], colors["green"], colors["light_blue"], colors["blue"], colors["cyan"], colors["light_magenta"], colors["magenta"]
 			],
-			highlight_color = colors["light_black"],
 			highlight_method = "line",
 			inactive = colors["light_white"],
 			invert = True,
 			padding = 7,
-			rainbox = True
+			rainbow = True
 		),
 
 		CustomTextBox(
