@@ -13,7 +13,6 @@ from libqtile.config import Click, Drag, Group, Key, Match, Screen
 from libqtile.lazy import lazy
 from libqtile.log_utils import logger
 
-
 import os, socket, subprocess, requests, psutil, random, re
 
 # ----- ALIAS ----- #
@@ -72,6 +71,8 @@ DICT_FIRA_CODE_POINT = {
 }
 
 # ----- Utils ----- #
+
+os.environ["LANG"] = "en_EN.UTF-8"
 
 def rd_icon():
 	family = random.choices([a for a in DICT_FIRA_CODE_POINT.keys()], [((maxi - mini + 0x4) / 0x4) for (mini,maxi) in DICT_FIRA_CODE_POINT.values()])
