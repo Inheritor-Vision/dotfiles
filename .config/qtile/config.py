@@ -411,41 +411,38 @@ def init_widgets_list():
 		),
 
 		modify(
-			CustomTextBox,
-			background 	= colors["light_magenta"],
+			widget.CurrentLayoutIcon,
+			custom_icon_paths = [os.path.expanduser("~/.config/qtile/DATA/icons")],
 			foreground = colors["light_black"],
-			decorations = [ 
+			background = colors["light_magenta"],
+			font = font,
+			fontsize = 16,
+			decorations = [
 				RectDecoration(
 					filled = True,
 					radius = [10, 0, 0, 10],
 					use_widget_background = True
 				)
 			],
-			font = font,
-			fontsize = 16,
-			text = "󰋋",
-			x = 4
+			padding = 6, 
+			scale = 0.5
+
 		),
 
 		modify(
-			widget.PulseVolume,
+			CustomTextBox,
 			foreground = colors["light_black"],
 			background = colors["light_magenta"],
 			font = font,
-			fontsize = 13,
+			fontsize = 1,
 			decorations = [
 				PowerLineDecoration(
 					path = "arrow_right",
 					size = 11
 				)
 			],
-			update_interval = 0.2,
-			device = sound_output,
-			width = bar.CALCULATED,
-			padding = 3,
-			fmt = " {} "
+			text = " ",
 		),
-
 
 		modify(
 			CustomTextBox,
@@ -497,9 +494,9 @@ def init_widgets_list():
 
 		modify(
 			CustomTextBox,
+			background 	= colors["light_green"],
 			foreground = colors["light_black"],
-			background = colors["light_green"],
-			decorations = [
+			decorations = [ 
 				RectDecoration(
 					filled = True,
 					radius = [10, 0, 0, 10],
@@ -508,14 +505,14 @@ def init_widgets_list():
 			],
 			font = font,
 			fontsize = 16,
-			offset = 3,
-			text = "󰻠",
-			x = 5
+			text = "󰋋",
+			x = 4
 		),
 
-		widget.CPU(
-			foreground = colors["light_black"],
+		modify(
+			widget.PulseVolume,
 			background = colors["light_green"],
+			foreground = colors["light_black"],
 			font = font,
 			fontsize = 13,
 			decorations = [
@@ -524,8 +521,44 @@ def init_widgets_list():
 					size = 11
 				)
 			],
-			format = "{load_percent: 3.0f}%"
+			update_interval = 0.2,
+			device = sound_output,
+			width = bar.CALCULATED,
+			padding = 3,
+			fmt = " {} "
 		),
+
+		# modify(
+		# 	CustomTextBox,
+		# 	foreground = colors["light_black"],
+		# 	background = colors["light_green"],
+		# 	decorations = [
+		# 		RectDecoration(
+		# 			filled = True,
+		# 			radius = [10, 0, 0, 10],
+		# 			use_widget_background = True
+		# 		)
+		# 	],
+		# 	font = font,
+		# 	fontsize = 16,
+		# 	offset = 3,
+		# 	text = "󰻠",
+		# 	x = 5
+		# ),
+
+		# widget.CPU(
+		# 	foreground = colors["light_black"],
+		# 	background = colors["light_green"],
+		# 	font = font,
+		# 	fontsize = 13,
+		# 	decorations = [
+		# 		PowerLineDecoration(
+		# 			path = "arrow_right",
+		# 			size = 11
+		# 		)
+		# 	],
+		# 	format = "{load_percent: 3.0f}%"
+		# ),
 
 		CustomTextBox(
 			foreground = colors["light_black"],
