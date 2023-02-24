@@ -57,17 +57,25 @@ ENCYCLOPEDIA_PATH = '/mnt/data/Encyclopedia\ Galactica/'
 
 # https://github.com/ryanoasis/nerd-fonts/wiki/Glyph-Sets-and-Code-Points
 DICT_FIRA_CODE_POINT = {
-		"Custom_Seti-UI":       (0xe5fa, 0xe62b),
+		"Custom_Seti-UI":       (0xe5fa, 0xe631),
 		"Devicons":             (0xe700, 0xe7c5),
 		"Awesome":              (0xf000, 0xf2e0),
+		"Awesome_Extension":	(0xe200, 0xe2a9),
 		"Material_Design":      (0xf500, 0xfd46),
 		"Weather":              (0xe300, 0xe3eb),
-		"Octicons":             (0xf400, 0xf4a8),
-		"Powerline":            (0xe0b4, 0xe0c8),
-		"Powerline2":           (0xe0cc, 0xe0d2),
+		"Octicons":             (0xf400, 0xf4a9),
+		"Octicons2":			(0x2665, 0x26a1),
+		"Powerline":            (0xe0a0, 0xe0a2),
+		"Powerline2":           (0xe0b0, 0xe0b3),
+		"Powerline_Extra":		(0xe0a3, 0xe0a3),
+		"Powerline_Extra2":		(0xe0b4, 0xe0c8),
+		"Powerline_Extra3":		(0xe0ca, 0xe0ca),
+		"Powerline_Extra4":		(0xe0cc, 0xe0d4),
 		"IEC_Power_Symbols":    (0x23fb, 0x23fe),
-		"Font_Linux":           (0xf300, 0xf313),
-		"Pomicons":             (0xe000, 0xe00d)
+		"IEC_Power_Symbols2":   (0x2b58, 0x2b58),
+		"Font_Linux":           (0xf300, 0xf32d),
+		"Pomicons":             (0xe000, 0xe00a),
+		"Codicons":             (0xea60, 0xebeb)
 }
 
 # ----- Utils ----- #
