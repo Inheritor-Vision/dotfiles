@@ -88,7 +88,7 @@ icon = rd_icon()
 # Window page: https://github.com/qtile/qtile/blob/0c049edd96069a7030c4895e9832711c07bb0bfa/libqtile/backend/base.py
 # Window.window (set_property?): https://github.com/qtile/qtile/blob/0c049edd96069a7030c4895e9832711c07bb0bfa/libqtile/backend/x11/window.py
 
-dict_sketchy_apps_once  = {"VSCodium": ""}
+dict_sketchy_apps_once  = {"VSCodium": ""}
 dict_match              = {re.compile(".* - Oracle VM VirtualBox : 2.*"): icon, re.compile(".* - Oracle VM VirtualBox : 1.*"): ""}
 
 @hook.subscribe.client_new
