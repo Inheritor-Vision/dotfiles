@@ -80,8 +80,6 @@ DICT_FIRA_CODE_POINT = {
 
 # ----- Utils ----- #
 
-os.environ["LANG"] = "en_EN.UTF-8"
-
 def rd_icon():
 	family = random.choices([a for a in DICT_FIRA_CODE_POINT.keys()], [((maxi - mini + 0x4) / 0x4) for (mini,maxi) in DICT_FIRA_CODE_POINT.values()])
 	(mini, maxi) = DICT_FIRA_CODE_POINT[family[0]]
