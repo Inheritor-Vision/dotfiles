@@ -2,12 +2,12 @@ from typing import List
 
 from core.widget.custom_groupbox import CustomGroupBox
 from core.widget.custom_textbox import CustomTextBox
+from core.widget.custom_image import CustomImage
 
 from qtile_extras import widget
 from qtile_extras.widget import modify
 from qtile_extras.widget.decorations import RectDecoration, PowerLineDecoration
 from libqtile import bar, layout, hook
-from libqtile.backend.x11.xkeysyms import keysyms
 from libqtile.bar import CALCULATED
 from libqtile.config import Click, Drag, Group, Key, Match, Screen
 from libqtile.lazy import lazy
@@ -393,8 +393,9 @@ def init_widgets_list():
 		),
 
 		modify(
-			widget.Image,
+			CustomImage,
 			background 	= colors["light_blue"],
+			inactive_background = colors["light_white"],
 			decorations = [ 
 				RectDecoration(
 					filled = True,
