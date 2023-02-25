@@ -13,7 +13,7 @@ from libqtile.config import Click, Drag, Group, Key, Match, Screen
 from libqtile.lazy import lazy
 from libqtile.log_utils import logger
 
-import os, socket, subprocess, requests, psutil, random, re
+import os, socket, subprocess, requests, psutil, random, re, json
 
 # ----- ALIAS ----- #
 alt = "mod1"
@@ -78,14 +78,40 @@ DICT_FIRA_CODE_POINT = {
 		"Codicons":             (0xea60, 0xebeb)
 }
 
+PATH_CACHE 			= "~/.local/share/qtile/"
+PATH_ICONS_CACHE	= os.path.expanduser(PATH_CACHE + "icons")
+
 # ----- Utils ----- #
+
+# When restarting, groups are not fully updated (i.e. old groups are not deleted, new are addedq)
+# As consequence, random generates a new icon that is added to the bard and the old ones are not deleted
+# Hence, on restart, icon must be saved and not re-generated.
+@lazy.function
+def restart(qtile, icons = [], path = PATH_ICONS_CACHE):
+	with open(path, "w") as f:
+		json.dump({"icons" : icons}, f)
+	qtile.cmd_restart()
+
+@hook.subscribe.startup_complete
+def clean_cache():
+	try:
+		os.remove(PATH_ICONS_CACHE)
+	except FileNotFoundError:
+		pass
 
 def rd_icon():
 	family = random.choices([a for a in DICT_FIRA_CODE_POINT.keys()], [((maxi - mini + 0x4) / 0x4) for (mini,maxi) in DICT_FIRA_CODE_POINT.values()])
 	(mini, maxi) = DICT_FIRA_CODE_POINT[family[0]]
 	return chr(random.randrange(mini, maxi + 0x4, 0x4))
 
-icon = rd_icon()
+
+icon = None
+try:
+    with open(PATH_ICONS_CACHE, "r") as f:
+        icon = json.load(f)["icons"][0]
+
+except FileNotFoundError:
+    icon = rd_icon()
 
 # For apps with indirection and/or that implements poorly X11 and/or have multiple pids (& fucks with X11 rules)
 # See async wait in qtile https://github.com/qtile/qtile/pull/2063
@@ -196,6 +222,10 @@ def get_alsa_index(name):
 
 sound_index = str(get_alsa_index(sound_output))
 
+
+
+	
+
 # ----- KEYS ----- #
 
 keys = []
@@ -260,7 +290,7 @@ keys += [
 	Key([mod], "w", lazy.window.kill(), desc="Kill focused window"),
 
 	# Restat, Quit and Execute
-	Key([mod, "control"], "r", lazy.restart(), desc="Restart Qtile"),
+	Key([mod, "control"], "r", restart([icon]), desc="Restart Qtile"),
 	Key([mod, "control"], "q", lazy.shutdown(), desc="Shutdown Qtile"),
 	Key([mod], "r", lazy.spawn("rofi -show drun"),
 		desc="Spawn a command using a prompt widget"),
@@ -273,8 +303,8 @@ def init_group_names():
 			("", {'layout':'monadtall'}),
 			("", {'layout':'max',        'spawn': 'brave'}),
 			("", {'layout':'monadtall'}),
-			#(icon, {'layout':'monadtall', "matches": [Match(title=[re.compile(".* - Oracle VM VirtualBox : 2.*")])]}),
-			("a", {'layout':'monadtall', "matches": [Match(title=[re.compile(".* - Oracle VM VirtualBox : 2.*")])]}),
+			(icon, {'layout':'monadtall', "matches": [Match(title=[re.compile(".* - Oracle VM VirtualBox : 2.*")])]}),
+			# ("a", {'layout':'monadtall', "matches": [Match(title=[re.compile(".* - Oracle VM VirtualBox : 2.*")])]}),
 			("󰍺", {'layout':'max',        'spawn': 'virtualbox', "matches": [Match(title=[re.compile(".* - Oracle VM VirtualBox : 1.*")])]}),
 			("󱅰", {'layout':'treetab',    'spawn': ["discord", 'signal-desktop']}),
 			("", {'layout':'monadtall',  'spawn': 'spotify'}),
