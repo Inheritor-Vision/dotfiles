@@ -507,7 +507,7 @@ def init_widgets_list():
 			colour_have_updates = colors["light_black"],
 			colour_no_updates = colors["light_black"],
 			display_format = "{updates} updates  ",
-			distro = "Arch_checkupdates",
+			distro = "Arch",
 			initial_text = "No update  ",
 			no_update_string = "No update  ",
 			padding = 0,
