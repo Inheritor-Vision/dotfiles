@@ -115,9 +115,9 @@ hwclock --systohc
 
 # ---- Localization ----- #
 
-vim /etc/locale.gen # Uncomment fr_FR.UTF-8 UTF-8
+vim /etc/locale.gen # Uncomment en_US.UTF-8 UTF-8
 locale-gen
-vim /etc/locale.conf # Create & add LANG=fr_FR.UTF-8
+vim /etc/locale.conf # Create & add LANG=en_US.UTF-8
 vim /etc/vconsole.conf # Create & add KEYMAP=fr-latin1
 
 # ----- Network ----- #
