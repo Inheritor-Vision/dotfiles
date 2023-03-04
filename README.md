@@ -110,7 +110,7 @@ pacman -S efibootmgr
 
 # ----- Time Zone ----- #
 
-ls -sf /user/share/zoneinfo/Europe/Paris /etc/localtime
+ln -sf /user/share/zoneinfo/Europe/Paris /etc/localtime
 hwclock --systohc
 
 # ---- Localization ----- #
