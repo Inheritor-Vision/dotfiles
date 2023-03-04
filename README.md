@@ -168,10 +168,10 @@ shutdown now
 sudo pacman -Sy archlinux-keyring & sudo pacman -Su
 sudo pacman -S virtualbox-guest-utils
 sudo systemctl enable vboxservice.service
-sudo pacman -S python python-pip nvim spotify alacritty git base-devel qtile feh picom pulseaudio
+sudo pacman -S python python-pip neovim alacritty git base-devel qtile feh picom pulseaudio xdotool
 
-git clone https://aur.archlinux.org/yay.git && cd yay && makepkg -si && cd .. && rm -r yay
-yay -S otf-nerd-fonts-fira-code brave-bin spotify xdotool
+git clone https://aur.archlinux.org/yay.git && cd yay && makepkg -si && cd .. && rm -rf yay
+yay -S ttf-firacode-nerd brave-bin spotify
 
 python -m pip install psutil requests --user
 
