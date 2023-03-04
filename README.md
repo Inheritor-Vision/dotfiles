@@ -115,15 +115,15 @@ hwclock --systohc
 
 # ---- Localization ----- #
 
-vim /etc/locale.gen # Uncomment en_US.UTF-8 UTF-8
+nvim /etc/locale.gen # Uncomment en_US.UTF-8 UTF-8 & fr_FR.UTF-8 UTF8
 locale-gen
-vim /etc/locale.conf # Create & add LANG=en_US.UTF-8
-vim /etc/vconsole.conf # Create & add KEYMAP=fr-latin1
+nvim /etc/locale.conf # Create & add LANG=en_US.UTF-8
+nvim /etc/vconsole.conf # Create & add KEYMAP=fr-latin1
 
 # ----- Network ----- #
 
-vim /etc/hostname # Modify hostname
-vim /etc/hosts # Append :
+nvim /etc/hostname # Modify hostname
+nvim /etc/hosts # Append :
 # 127.0.0.1	localhost
 # ::1		localhost
 # 127.0.1.1	myhostname.localdomain	myhostname 
