@@ -175,6 +175,8 @@ yay -S ttf-firacode-nerd brave-bin spotify
 
 python -m pip install psutil requests --user
 
+localectl set-x11-keymap fr
+
 # ----- Optional ------ #
 
 To be determined.
