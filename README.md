@@ -144,7 +144,7 @@ EDITOR=nvim visudo # Uncomment sudo for wheel group
 
 # Only for UEFI Boot
 fdisk -l
-mkdir /boot/EFIq
+mkdir /boot/EFI
 mkdir /boot/EFI /dev/*sda_EFI*
 
 # ----- GRUB ----- #
@@ -168,7 +168,7 @@ shutdown now
 sudo pacman -Sy archlinux-keyring & sudo pacman -Su
 sudo pacman -S virtualbox-guest-utils
 sudo systemctl enable vboxservice.service
-sudo pacman -S python python-pip neovim alacritty git base-devel qtile feh picom pulseaudio xdotool
+sudo pacman -S python python-pip neovim alacritty git base-devel qtile feh picom pulseaudio xdotool xorg xorg-xinit xf86-video-fbdev
 
 git clone https://aur.archlinux.org/yay.git && cd yay && makepkg -si && cd .. && rm -rf yay
 yay -S ttf-firacode-nerd brave-bin spotify
