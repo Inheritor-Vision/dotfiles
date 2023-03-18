@@ -1,3 +1,3 @@
 from core import *
 
-wmname = "QTILE"
+wmname = "LG3D"
