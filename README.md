@@ -61,7 +61,8 @@ fdisk /dev/*disk_to_be_partitioned*
 # Create GPT table for UEFI boot
 g
 # Create DOS table for DOS boot
-o
+" /!\ Should be done automatically by fdisk >!\
+# o
 
 # TODO: SWAP partition (useless except for high end SSD for low memory PC), /home partition (for distro hopping / easy backup)
 # **/!\ CAUTION /!\**: Static partitions have to be place last. Root partition (or partition taking most of the space) HAS TO BE the first partition, in case you want to create a new partition, saving the copy
