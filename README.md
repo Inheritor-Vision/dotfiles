@@ -190,7 +190,7 @@ yay -S ngrok vscodium-bin vscodium-bin-marketplace
 To be determined.
 
 sudo pacman -S binwalk ghidra 
-yay -S 010editor android-apktool burpsuite gdb-multiarch gobuster dex2jar jd-gui 
+yay -S 010editor android-apktool burpsuite gdb-multiarch gobuster dex2jar jd-gui qtile-extras-git
 # ----- Dotfiles ----- #
 mkdir .dotfiles
 git clone -b portable --single-branch --bare https://github.com/Inheritor-Vision/dotfiles.git ~/.dotfiles
