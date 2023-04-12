@@ -184,4 +184,5 @@ fi
 ## VMs
 
 - xinitrc: wallpaper, minefield text cycle, screens
+- qtile: update alsa audio output
 .........
