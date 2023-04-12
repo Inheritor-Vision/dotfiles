@@ -180,3 +180,8 @@ if [ "${grub_platform}" == "efi" ]; then
 	}
 fi
 ```
+
+## VMs
+
+- xinitrc: wallpaper, minefield text cycle, screens
+.........
