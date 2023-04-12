@@ -174,7 +174,7 @@ sudo pacman -S python python-pip neovim alacritty git base-devel qtile feh picom
 git clone https://aur.archlinux.org/yay.git && cd yay && makepkg -si && cd .. && rm -rf yay
 yay -S ttf-firacode-nerd brave-bin spotify
 
-python -m pip install psutil requests --user
+python -m pip install psutil requests
 
 localectl set-x11-keymap fr
 
