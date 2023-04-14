@@ -171,6 +171,8 @@ sudo pacman -S virtualbox-guest-utils
 sudo systemctl enable vboxservice.service
 sudo pacman -S python python-pip pyenv neovim alacritty git base-devel qtile feh picom pulseaudio xdotool xorg xorg-xinit xf86-video-fbdev
 
+systemctl enable pulseaudio
+
 git clone https://aur.archlinux.org/yay.git && cd yay && makepkg -si && cd .. && rm -rf yay
 yay -S ttf-firacode-nerd brave-bin spotify
 
