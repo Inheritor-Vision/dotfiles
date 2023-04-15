@@ -169,7 +169,7 @@ shutdown now
 sudo pacman -Sy archlinux-keyring & sudo pacman -Su
 sudo pacman -S virtualbox-guest-utils
 sudo systemctl enable vboxservice.service
-sudo pacman -S python python-pip pyenv neovim alacritty git base-devel qtile feh picom pulseaudio xdotool xorg xorg-xinit xf86-video-fbdev numlockx
+sudo pacman -S python python-pip pyenv neovim alacritty git base-devel qtile feh picom pulseaudio xdotool xorg xorg-xinit xf86-video-fbdev
 
 systemctl enable pulseaudio
 
@@ -184,7 +184,7 @@ localectl set-x11-keymap fr
 
 To be determined.
 
-sudo pacman discord signal-desktop
+sudo pacman discord signal-desktop numlockx flameshot
 yay -S ngrok vscodium-bin vscodium-bin-marketplace
 
 # ----- Security ------ #
