@@ -2,7 +2,7 @@ import os, shutil, tempfile
 
 MAGIC       = "9bf624c60be9dca4fe9379f01da90d905667d8b2"    # SHA1("vision_setup_patcher")
 
-#---------------------------------------| Utility |--------------------------------------#
+# --------------------------------------| Utility |------------------------------------- #
 
 # Return abspath or None
 def get_file(file):
@@ -12,7 +12,7 @@ def get_file(file):
         return shutil.which(file)
 
 def is_file_existing(file):
-    return get_file != None
+    return get_file(file) != None
 
 class log:
     HEADER = '\033[95m'
@@ -25,14 +25,55 @@ class log:
     BOLD = '\033[1m'
     UNDERLINE = '\033[4m'
 
-    def warning(self, text):
-            print(f"{self.WARNING}[!] setup: {text}{self.ENDC}")
+    def warning(text):
+            print(f"{log.WARNING}{log.BOLD}[!]{log.ENDC} setup: {text}")
 
-    def error(self, text):
-            print(f"{self.FAIL}[X] setup: {text}{self.ENDC}")
+    def error(text):
+            print(f"{log.FAIL}{log.BOLD}[X]{log.ENDC} setup: {text}")
 
 
-#----------------------------------| dotfiles to patch |---------------------------------#
+# ---------------------------------| dotfiles to patch |-------------------------------- #
+
+pyenv_setup = """\
+export PYENV_ROOT="$HOME/.pyenv"
+export PATH="$PYENV_ROOT/bin:$PATH",
+"""
+
+nnn_setup = """\
+export NNN_OPTS="eEdU"
+export VISUAL=ewrap
+
+n ()
+{
+    # Block nesting of nnn in subshells
+    if [[ "${NNNLVL:-0}" -ge 1 ]]; then
+        echo "nnn is already running"
+        return
+    fi
+
+    # The behaviour is set to cd on quit (nnn checks if NNN_TMPFILE is set)
+    # If NNN_TMPFILE is set to a custom path, it must be exported for nnn to
+    # see. To cd on quit only on ^G, remove the "export" and make sure not to
+    # use a custom path, i.e. set NNN_TMPFILE *exactly* as follows:
+    #     NNN_TMPFILE="${XDG_CONFIG_HOME:-$HOME/.config}/nnn/.lastd"
+    export NNN_TMPFILE="${XDG_CONFIG_HOME:-$HOME/.config}/nnn/.lastd"
+    
+    # Unmask ^Q (, ^V etc.) (if required, see `stty -a`) to Quit nnn
+    # stty start undef
+    # stty stop undef
+    # stty lwrap undef
+    # stty lnext undef
+
+    # The backslash allows one to alias n to nnn if desired without making an
+    # infinitely recursive alias
+    \nnn "$@"
+
+    if [ -f "$NNN_TMPFILE" ]; then
+            . "$NNN_TMPFILE"
+            rm -f "$NNN_TMPFILE" > /dev/null
+    fi
+}
+"""
 
 # {"filename": {"key":("text_replacing_key", "OPTIONAL_condition"), ...}, ...}
 dotfiles_patch = {
@@ -45,11 +86,16 @@ dotfiles_patch = {
         "grub_theme_cycle": ("/boot/grub/themes/minegrub-theme/Cycle/Cycler.sh",
                             is_file_existing("/boot/grub/themes/minegrub-theme/\
                             Cycle/Cycler.sh")),
+    },
+    ".bashrc": {
+        "path_rust": ("export PATH=$PATH:/home/vision/.cargo/bin", False),
+        "path_pyenv": (pyenv_setup, is_file_existing("pyenv")),
+        "nnn": (nnn_setup, is_file_existing("nnn")),
     }
 }
 
 
-#----------------------------------------| Core |----------------------------------------#
+# ---------------------------------------| Core |--------------------------------------- #
 
 
 def patch(dp):
@@ -76,11 +122,11 @@ def patch(dp):
                                     ft.write(dp[file][key][0].encode() + b"\n")
                                 break
                         else: 
-                            log.warning(f"\"{l}\" does not match any keys. Key has been removed")
+                            log.warning(f"\"{l}\" does not match any keys found in {file}. Key has been removed")
                             ft.write(b"\n")
                 for k in dp[file]:
                     if k not in keys_replaced:
-                        log.warning(f"{k} has not been found")
+                        log.warning(f"{k} has not been found in {file}")
             ft.seek(0)
             with open(file_path, "wb") as f:
                 f.write(ft.read())
