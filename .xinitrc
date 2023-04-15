@@ -51,25 +51,25 @@ fi
 
 # CUSTOM
 ## Configure screens
-xrandr --output Virtual1 --primary
+screen_setup_9bf624c60be9dca4fe9379f01da90d905667d8b2
 
 ## Swap Caps Lock to Esc
-setxkbmap -option caps:swapescape
+keyboard_setup_9bf624c60be9dca4fe9379f01da90d905667d8b2
 
 ## Activate numlock on startup
-numlockx &
+numlock_9bf624c60be9dca4fe9379f01da90d905667d8b2
 
 ## Start picom 
 picom -b
 
 ## Change wallpaper, before wallpaper.timer take his turn
-feh --randomize --bg-max ~/.config/qtile/DATA/wallpaper.jpg
+wallpaper_9bf624c60be9dca4fe9379f01da90d905667d8b2
 
 ## Screenshot utility
-flameshot &
+screenshot_util_9bf624c60be9dca4fe9379f01da90d905667d8b2
 
 ## Minefield text cycle
-/boot/grub/themes/minegrub-theme/Cycle/Cycler.sh
+grub_theme_cycle_9bf624c60be9dca4fe9379f01da90d905667d8b2
 
 ## Start WM
 exec qtile start
