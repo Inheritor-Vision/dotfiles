@@ -51,18 +51,25 @@ fi
 
 # CUSTOM
 ## Configure screens
-xrandr --output VGA-1 --mode "1920x1080"
-xrandr --output VGA-2 --mode "1920x1080"
-xrandr --output VGA-2 --primary --output VGA-1 --left-of VGA-2
+xrandr --output Virtual1 --primary
 
 ## Swap Caps Lock to Esc
 setxkbmap -option caps:swapescape
 
+## Activate numlock on startup
+numlockx &
+
 ## Start picom 
-picom &
+picom -b
 
 ## Change wallpaper, before wallpaper.timer take his turn
 feh --randomize --bg-max ~/.config/qtile/DATA/wallpaper.jpg
+
+## Screenshot utility
+flameshot &
+
+## Minefield text cycle
+/boot/grub/themes/minegrub-theme/Cycle/Cycler.sh
 
 ## Start WM
 exec qtile start
