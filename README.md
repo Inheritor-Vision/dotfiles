@@ -9,10 +9,9 @@
 
 # VM Settings
 
+- Check **3D Acceleration** or disable blur and maybe other option is **picom.conf**
+- Add enought Memory & CPU & Screen memory
 - Check [Network_matrix](https://www.virtualbox.org/manual/ch06.html#networkingmodes) for Networking. 
-- Need 2 screens (modify .xinitrc for 1)
-- Add enought Memory & CPU
-- Don't auto mount in the case of Security Investigation
 
 # For VMs: ISO Install
 
