@@ -1,0 +1,10 @@
+/* See https://github.com/davatorium/rofi/blob/next/doc/rofi-theme.5.markdown */
+
+configuration {
+	font: "FiraCode Nerd Font Mono Bold 11";
+	modi: "window,drun";
+	show-icons: true;
+	icon-theme: "Papirus";
+}
+
+@theme "default"
