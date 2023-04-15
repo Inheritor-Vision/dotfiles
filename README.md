@@ -119,6 +119,7 @@ nvim /etc/locale.gen # Uncomment en_US.UTF-8 UTF-8 & fr_FR.UTF-8 UTF8
 locale-gen
 nvim /etc/locale.conf # Create & add LANG=en_US.UTF-8
 nvim /etc/vconsole.conf # Create & add KEYMAP=fr-latin1
+locale-gen
 
 # ----- Network ----- #
 
