@@ -169,7 +169,7 @@ shutdown now
 sudo pacman -Sy archlinux-keyring & sudo pacman -Su
 sudo pacman -S virtualbox-guest-utils
 sudo systemctl enable vboxservice.service
-sudo pacman -S python python-pip pyenv neovim alacritty git base-devel qtile feh picom pulseaudio xdotool xorg xorg-xinit xf86-video-fbdev
+sudo pacman -S python python-pip pyenv neovim alacritty git base-devel qtile feh picom pulseaudio xdotool xorg xorg-xinit xf86-video-fbdev numlockx
 
 systemctl enable pulseaudio
 
