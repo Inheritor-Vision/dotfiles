@@ -138,7 +138,7 @@ passwd
 # Create Sudo user
 useradd -m vision
 passwd vision
-usermod -aG wheel,audio,video,optical,storage vision
+usermod -aG wheel,audio,video,optical,storage,docker vision
 EDITOR=nvim visudo # Uncomment sudo for wheel group
 
 # ----- Mount EFI -----#
