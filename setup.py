@@ -87,6 +87,9 @@ dotfiles_patch = {
                             is_file_existing("/boot/grub/themes/minegrub-theme/\
                             Cycle/Cycler.sh")),
     },
+        "..config/qtile/core/conf.py": {
+        "sound_sink_name": ("SOUND_SINK_NAME = \"alsa_output.pci-0000_00_05.0.analog-stereo\"",),
+    },
     ".bashrc": {
         "path_rust": ("export PATH=$PATH:/home/vision/.cargo/bin", False),
         "path_pyenv": (pyenv_setup, is_file_existing("pyenv")),
