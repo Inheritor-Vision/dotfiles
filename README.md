@@ -174,7 +174,7 @@ sudo pacman -S python python-pip pyenv neovim alacritty git base-devel qtile feh
 systemctl enable pulseaudio
 
 git clone https://aur.archlinux.org/yay.git && cd yay && makepkg -si && cd .. && rm -rf yay
-yay -S ttf-firacode-nerd brave-bin spotify
+yay -S ttf-firacode-nerd brave-bin spotify qtile-extras-git
 
 python -m pip install psutil requests
 
@@ -197,6 +197,10 @@ yay -S 010editor android-apktool burpsuite gdb-multiarch gobuster dex2jar jd-gui
 mkdir .dotfiles
 git clone -b portable --single-branch --bare https://github.com/Inheritor-Vision/dotfiles.git ~/.dotfiles
 git --git-dir=$HOME/.dotfiles/ --work-tree=$HOME reset --hard
+
+# Then run setup.py with appropriate values
+python setup.py
+
 source .bashrc
 git-config config --local status.showUntrackedFiles no
 git-config status
