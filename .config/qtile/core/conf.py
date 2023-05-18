@@ -115,7 +115,8 @@ PATH_AUTOSTART = os.path.expanduser("~/.config/qtile/autostart.sh")
 # ------------------------------------| SOUND SINK |------------------------------------ #
 
 # Sink name found manually. Did that once for and for all.
-SOUND_SINK_NAME = "alsa_output.usb-Logitech_PRO_X_000000000000-00.analog-stereo"
+# SOUND_SINK_NAME = "alsa_output.usb-Logitech_PRO_X_000000000000-00.analog-stereo"
+SOUND_SINK_NAME = "alsa_output.usb-Bluetrum_USB_Audio"
 
 # -------------------------------------| Screens |-------------------------------------- #
 

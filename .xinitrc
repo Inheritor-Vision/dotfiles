@@ -51,7 +51,7 @@ fi
 
 # CUSTOM
 ## Configure screens
-xrandr --output DP-4 --primary --output HDMI-0 --left-of DP-4
+xrandr --output DP-2 --right-of HDMI-0
 
 ## Swap Caps Lock to Esc
 setxkbmap -option caps:swapescape

@@ -2,8 +2,8 @@
 # Creation of the top bar
 
 from core.conf							import (
-	colors, 
-	FONT, 
+	colors,
+	FONT,
 	PATH_LAYOUT_ICONS,
 	SOUND_SINK_NAME
 )
@@ -11,16 +11,16 @@ from core.widget.custom_groupbox 		import CustomGroupBox
 from core.widget.custom_textbox 		import CustomTextBox
 from core.widget.custom_image 			import CustomImage
 
-from qtile_extras 						import widget
-from qtile_extras.widget 				import modify
-from qtile_extras.widget.decorations 	import RectDecoration, PowerLineDecoration
-from libqtile.bar 						import CALCULATED
+from qtile_extras						import widget
+from qtile_extras.widget				import modify
+from qtile_extras.widget.decorations	import RectDecoration, PowerLineDecoration
+from libqtile.bar						import CALCULATED
 
 import psutil, requests, socket, subprocess
 
 # -----------------------------| [LEGACY] Network status |------------------------------ #
 
-# Interfaces names, see: 
+# Interfaces names, see:
 # https://www.freedesktop.org/wiki/Software/systemd/PredictableNetworkInterfaceNames
 def _check_interface(interface):
 	interface_addrs = psutil.net_if_addrs().get(interface) or []
@@ -39,13 +39,12 @@ def _icon_check_ethernet():
 	return '<span foreground="' + colors["magenta"] + '"></span>' \
 		if eth_interfaces else  '<span foreground="' + colors["light_red"] + '"></span>'
 
-
 def _icon_check_vpn():
 	return '<span foreground="' + colors["magenta"] + '">嬨</span>' \
 		if not subprocess.run([
-			"systemctl", 
-			"is-active", 
-			"--quiet", 
+			"systemctl",
+			"is-active",
+			"--quiet",
 			"openvpn@vpn.service"]
 		).returncode else  '<span foreground="' + colors["light_red"] + '">嬨</span>'
 
@@ -57,7 +56,7 @@ def _crypto_value(crypto):
 		.split(".")
 	return '<span foreground="' + colors["cyan"] + '">' + raw_price[0] + "." \
 		+ raw_price[1][:2] + '€</span>'
-	
+
 def _xmr_value(): return _crypto_value("xmr")
 
 
@@ -110,7 +109,7 @@ def _init_widgets_list():
 			CustomImage,
 			background 	= colors["light_blue"],
 			inactive_background = colors["light_white"],
-			decorations = [ 
+			decorations = [
 				RectDecoration(
 					filled = True,
 					radius = 10,
@@ -175,7 +174,7 @@ def _init_widgets_list():
 					use_widget_background = True
 				)
 			],
-			padding = 6, 
+			padding = 6,
 			scale = 0.5
 
 		),
@@ -247,7 +246,7 @@ def _init_widgets_list():
 			CustomTextBox,
 			background 	= colors["light_green"],
 			foreground = colors["light_black"],
-			decorations = [ 
+			decorations = [
 				RectDecoration(
 					filled = True,
 					radius = [10, 0, 0, 10],

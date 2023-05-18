@@ -96,3 +96,4 @@ n ()
             rm -f "$NNN_TMPFILE" > /dev/null
     fi
 }
+export PATH="$PATH:/opt/010editor" #ADDED BY 010 EDITOR
