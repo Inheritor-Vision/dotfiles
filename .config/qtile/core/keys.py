@@ -67,7 +67,44 @@ def _get_alsa_index(name):
 
 _sound_index = str(_get_alsa_index(SOUND_SINK_NAME))
 
+@lazy.function
+def _increase_volume(qtile):
+	global _sound_index
 
+	# Race condition if qtile is started before pulse audio daemon.
+	if _sound_index == str(-1):
+		_sound_index = str(_get_alsa_index(SOUND_SINK_NAME))
+		if _sound_index == str(-1):
+			return
+
+	os.system("pactl set-sink-volume " + _sound_index + " +2%")
+
+@lazy.function
+def _decrease_volume(qtile):
+	global _sound_index
+
+	# Race condition if qtile is started before pulse audio daemon.
+	if _sound_index == str(-1):
+		_sound_index = str(_get_alsa_index(SOUND_SINK_NAME))
+		if _sound_index == str(-1):
+			return
+
+	os.system("pactl set-sink-volume " + _sound_index + " -2%")
+
+
+@lazy.function
+def _mute_volume(qtile):
+	global _sound_index
+
+	# Race condition if qtile is started before pulse audio daemon.
+	if _sound_index == str(-1):
+		_sound_index = str(_get_alsa_index(SOUND_SINK_NAME))
+		if _sound_index == str(-1):
+			return
+
+	os.system("pactl set-sink-mute " + _sound_index + " toggle")
+	
+	
 # -------------------------------| Random Icons Caching |------------------------------- #
 
 # When restarting, groups are not fully updated (i.e. old groups are not deleted, 
@@ -124,14 +161,11 @@ keys += [
 	Key([MOD], "Right",lazy.next_screen()),
 
 	# Sound Control 
-	Key([], "XF86AudioLowerVolume", lazy.spawn(
-		"pactl set-sink-volume " + _sound_index + " -5%")
+	Key([], "XF86AudioLowerVolume", _decrease_volume()
 	),
-	Key([], "XF86AudioRaiseVolume", lazy.spawn(
-		"pactl set-sink-volume " + _sound_index + " +5%")
+	Key([], "XF86AudioRaiseVolume", _increase_volume()
 	),
-	Key([], "XF86AudioMute", lazy.spawn(
-		"pactl set-sink-mute " + _sound_index + " toggle")
+	Key([], "XF86AudioMute", _mute_volume()
 	),
 
 	# Track Control, attribuated to Spotify
