@@ -180,3 +180,9 @@ if [ "${grub_platform}" == "efi" ]; then
 	}
 fi
 ```
+
+## VMs
+
+- xinitrc: wallpaper, minefield text cycle, screens
+- qtile: update alsa audio output, disable qtile spawning of apps like signal, spotify etc. in groups.py
+.........
