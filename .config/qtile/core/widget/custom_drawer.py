@@ -1,7 +1,7 @@
 # All credits to jx11r
 # https://github.com/jx11r/qtile/blob/main/extras/groupbox.py
 
-from libqtile import drawer
+from libqtile.backend.base import drawer
 
 def framed(self, border_width, border_color, pad_x, pad_y, highlight_color=None):
 	return CustomTextFrame(
