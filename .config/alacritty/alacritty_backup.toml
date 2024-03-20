@@ -1,0 +1,49 @@
+live_config_reload = true
+
+[colors.bright]
+black = "#2e3436"
+blue = "#729fcf"
+cyan = "#fcaf3e"
+green = "#8ae234"
+magenta = "#ad7fa8"
+red = "#ef2929"
+white = "#eeeeec"
+yellow = "#fce94f"
+
+[colors.normal]
+black = "#2e3436"
+blue = "#3465a4"
+cyan = "#f57900"
+green = "#73d216"
+magenta = "#75507b"
+red = "#cc0000"
+white = "#d3d7cf"
+yellow = "#edd400"
+
+[colors.primary]
+background = "#2e3436"
+foreground = "#eeeeec"
+
+[schemes.tangoish.bright]
+black = "#2e3436"
+blue = "#729fcf"
+cyan = "#fcaf3e"
+green = "#8ae234"
+magenta = "#ad7fa8"
+red = "#ef2929"
+white = "#eeeeec"
+yellow = "#fce94f"
+
+[schemes.tangoish.normal]
+black = "#2e3436"
+blue = "#3465a4"
+cyan = "#f57900"
+green = "#73d216"
+magenta = "#75507b"
+red = "#cc0000"
+white = "#d3d7cf"
+yellow = "#edd400"
+
+[schemes.tangoish.primary]
+background = "#2e3436"
+foreground = "#eeeeec"
