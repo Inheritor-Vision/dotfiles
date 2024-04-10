@@ -4,8 +4,7 @@
 from core.conf							import (
 	colors,
 	FONT,
-	PATH_LAYOUT_ICONS,
-	SOUND_SINK_NAME
+	PATH_LAYOUT_ICONS
 )
 from core.widget.custom_groupbox 		import CustomGroupBox
 from core.widget.custom_textbox 		import CustomTextBox
@@ -272,7 +271,6 @@ def _init_widgets_list():
 				)
 			],
 			update_interval = 0.2,
-			device = SOUND_SINK_NAME,
 			width = CALCULATED,
 			padding = 3,
 			fmt = " {} "

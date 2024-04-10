@@ -6,8 +6,7 @@ from core.conf			import (
 	LIST_WALLPAPER_MODES,
 	MOD,
 	PATH_ICONS_CACHE,
-	PATH_WALLPAPER_SCRIPT,
-	SOUND_SINK_NAME
+	PATH_WALLPAPER_SCRIPT
 )
 from core.groups		import icon, group_names
 
@@ -46,62 +45,18 @@ def _create_change_wallpaper_mode():
 
 
 # ----------------------------------| Sound Settings |---------------------------------- #
-
-# Pulse Audio daemon can take some time to restart when using lazy.restart(). Quite random
-def _get_alsa_index(name):
-	sinks  = subprocess.getoutput("pacmd list-sinks | grep -e 'name:' -e 'index:'")\
-		.split("\n")
-	index = None
-	lname = None
-	for l in sinks:
-		if not isinstance(index,int):
-			index = int(l[-1])
-		else:
-			lname = l.split("<")[1].split(">")[0]
-			if name in lname:
-				return index
-			index = None
-	else:
-		return -1
-
-_sound_index = str(_get_alsa_index(SOUND_SINK_NAME))
-
 @lazy.function
 def _increase_volume(qtile):
-	global _sound_index
-
-	# Race condition if qtile is started before pulse audio daemon.
-	if _sound_index == str(-1):
-		_sound_index = str(_get_alsa_index(SOUND_SINK_NAME))
-		if _sound_index == str(-1):
-			return
-
-	os.system("pactl set-sink-volume " + _sound_index + " +2%")
+	os.system("pactl set-sink-volume @DEFAULT_SINK@ +2%")
 
 @lazy.function
 def _decrease_volume(qtile):
-	global _sound_index
-
-	# Race condition if qtile is started before pulse audio daemon.
-	if _sound_index == str(-1):
-		_sound_index = str(_get_alsa_index(SOUND_SINK_NAME))
-		if _sound_index == str(-1):
-			return
-
-	os.system("pactl set-sink-volume " + _sound_index + " -2%")
+	os.system("pactl set-sink-volume @DEFAULT_SINK@ -2%")
 
 
 @lazy.function
 def _mute_volume(qtile):
-	global _sound_index
-
-	# Race condition if qtile is started before pulse audio daemon.
-	if _sound_index == str(-1):
-		_sound_index = str(_get_alsa_index(SOUND_SINK_NAME))
-		if _sound_index == str(-1):
-			return
-
-	os.system("pactl set-sink-mute " + _sound_index + " toggle")
+	os.system("pactl set-sink-mute @DEFAULT_SINK@ toggle")
 
 # -------------------------------| Random Icons Caching |------------------------------- #
 
