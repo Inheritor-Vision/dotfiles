@@ -49,20 +49,20 @@ def _init_group_names():
 			("", {'layout':'max',        'spawn': 'brave'}),
 			("", {'layout':'monadtall'}),
 			(icon, {'layout':'monadtall', "matches": [
-				Match(title=[re.compile(".* - Oracle VM VirtualBox : 2.*")])
+				Match(title=re.compile(".* - Oracle VM VirtualBox : 2.*"))
 			]}),
 			# ("i", {'layout':'monadtall', "matches": [
-			# 	Match(title=[re.compile(".* - Oracle VM VirtualBox : 2.*")])
+			# 	Match(title=re.compile(".* - Oracle VM VirtualBox : 2.*"))
 			# ]}),
 			("󰍺", {'layout':'max', 'spawn': 'virtualbox', "matches": [
-				Match(title=[re.compile(".* - Oracle VM VirtualBox : 1.*")])
+				Match(title=re.compile(".* - Oracle VM VirtualBox : 1.*"))
 			]}),
 			("󱅰", {'layout':'treetab',    'spawn': ["discord", 'signal-desktop']}),
 			("", {'layout':'monadtall',  'spawn': 'spotify'}),
 			("󰒍", {'layout':'monadtall'}),
 			("", {'layout':'monadtall',  'spawn': 'vscodium ' + PATH_ENCYCLOPEDIA \
 				+ '/.vscode/Enc_Gal.code-workspace', "matches": [
-					Match(title= [re.compile(".*Enc_Gal (Workspace).*")])
+					Match(title=re.compile(".*Enc_Gal (Workspace).*"))
 				]})]
 
 group_names = _init_group_names()

@@ -258,8 +258,8 @@ def _init_widgets_list():
 			x = 4
 		),
 
-		modify(
-			widget.PulseVolume,
+		# modify(
+		widget.PulseVolume(
 			background = colors["light_green"],
 			foreground = colors["light_black"],
 			font = FONT,
