@@ -46,7 +46,7 @@ icon = _get_icon()
 def _init_group_names():
 	return [
 			("", {'layout':'monadtall'}),
-			("", {'layout':'max',        'spawn': 'brave'}),
+			("", {'layout':'max',        'spawn': 'firefox'}),
 			("", {'layout':'monadtall'}),
 			(icon, {'layout':'monadtall', "matches": [
 				Match(title=re.compile(".* - Oracle VM VirtualBox : 2.*"))
