@@ -60,7 +60,7 @@ def _init_group_names():
 			("󱅰", {'layout':'treetab',    'spawn': ["discord", 'signal-desktop']}),
 			("", {'layout':'monadtall',  'spawn': 'spotify'}),
 			("󰒍", {'layout':'monadtall'}),
-			("", {'layout':'monadtall',  'spawn': 'vscodium ' + PATH_ENCYCLOPEDIA \
+			("", {'layout':'monadtall',  'spawn': 'code ' + PATH_ENCYCLOPEDIA \
 				+ '/.vscode/Enc_Gal.code-workspace', "matches": [
 					Match(title=re.compile(".*Enc_Gal (Workspace).*"))
 				]})]
